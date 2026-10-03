@@ -22,9 +22,9 @@ type FolderCardItem = {
 
 const cards: FolderCardItem[] = [
   {
-    id: "turftrack",
+    id: "fairlie",
     number: "01",
-    title: "TurfTrack / FairLie",
+    title: "FairLie",
     description: "Smart golf training mat",
     detail: "Pressure sensing · IMU · 60GHz radar · BLE",
     href: "#contact",

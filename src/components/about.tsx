@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { ExternalLink, FileText, Mail, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { about, connect } from "@/data/portfolio";
@@ -41,6 +42,7 @@ export function Connect() {
           {connect.map((link) => {
             const Icon =
               connectIcons[link.label as keyof typeof connectIcons] ?? Mail;
+            const isInternalPage = link.href.startsWith("/");
             return (
               <Button
                 key={link.label}
@@ -48,15 +50,22 @@ export function Connect() {
                 size="sm"
                 className="h-8 rounded-full px-3 text-xs"
               >
-                <a
-                  href={link.href}
-                  {...(link.href.startsWith("http")
-                    ? { target: "_blank", rel: "noreferrer" }
-                    : {})}
-                >
-                  <Icon data-icon="inline-start" />
-                  {link.label}
-                </a>
+                {isInternalPage ? (
+                  <Link href={link.href}>
+                    <Icon data-icon="inline-start" />
+                    {link.label}
+                  </Link>
+                ) : (
+                  <a
+                    href={link.href}
+                    {...(link.href.startsWith("http")
+                      ? { target: "_blank", rel: "noreferrer" }
+                      : {})}
+                  >
+                    <Icon data-icon="inline-start" />
+                    {link.label}
+                  </a>
+                )}
               </Button>
             );
           })}

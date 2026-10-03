@@ -14,11 +14,12 @@ export const site = {
   ],
   photo: "/avatar/chad-linkedin.jpg",
   character: "/avatar/chad-pixel.png",
-  resume: "/resume/Chad_Carmichael_Resume.pdf",
+  resume: "/resume",
+  resumeFile: "/resume/Chad_Carmichael_Resume.pdf",
   social: {
     github: "https://github.com/",
     linkedin: "https://www.linkedin.com/in/chad-carmichael-4475b726b",
-    resume: "/resume/Chad_Carmichael_Resume.pdf",
+    resume: "/resume",
   },
 } as const;
 
@@ -26,13 +27,13 @@ export const about = {
   heading: "About",
   bullets: [
     "I’m Chad Carmichael — a junior mechanical engineering student at Florida State University (Vires Scholar, IB Diploma) passionate about robotics and automation.",
-    "I work across mechanical systems, SolidWorks CAD, embedded software (ESP32 / nRF52840), and team-based product builds like TurfTrack / FairLie.",
+    "I work across mechanical systems, SolidWorks CAD, embedded software (ESP32 / nRF52840), and team-based product builds like FairLie.",
     "I want internship or co-op roles where I can apply CAD, sensors, and manufacturing docs early — and learn from engineers shipping real hardware.",
   ],
 } as const;
 
 export const connect = [
-  { label: "Resume", href: "/resume/Chad_Carmichael_Resume.pdf" },
+  { label: "Resume", href: "/resume" },
   { label: "Contact", href: "#contact" },
   { label: "GitHub", href: "https://github.com/" },
   {
@@ -60,7 +61,7 @@ export const experience = [
 
 export const projects = [
   {
-    title: "TurfTrack / FairLie",
+    title: "FairLie",
     description:
       "Smart golf training mat — 3-board embedded system (ESP32-S3, XIAO nRF52840, Pro Micro) fusing pressure sensors, 9-axis IMU, and 60GHz radar with BLE telemetry toward an iOS companion app.",
     stack: ["ESP32", "SolidWorks", "BLE", "SwiftUI"],

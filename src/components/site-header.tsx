@@ -1,21 +1,18 @@
 "use client";
 
-import { useLayoutEffect, useState } from "react";
-import { Menu, Moon, Sun, X } from "lucide-react";
+import { useLayoutEffect } from "react";
+import Link from "next/link";
+import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { site } from "@/data/portfolio";
-import { cn } from "@/lib/utils";
 
 const links = [
-  { href: "#about", label: "About" },
-  { href: "#projects", label: "Projects" },
-  { href: "#skills", label: "Programs" },
-  { href: "#contact", label: "Contact" },
+  { href: "/#about", label: "About" },
+  { href: "/#projects", label: "Projects" },
+  { href: "/#skills", label: "Programs" },
 ] as const;
 
 export function SiteHeader() {
-  const [open, setOpen] = useState(false);
-
   useLayoutEffect(() => {
     const savedTheme = localStorage.getItem("theme");
     const theme =
@@ -37,22 +34,22 @@ export function SiteHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/90 backdrop-blur-md">
-      <div className="flex h-12 items-center justify-between px-4 sm:px-5">
-        <a href="#top" className="font-brand text-[0.7rem] text-ink">
+    <header className="sticky top-0 z-[100] border-b border-border bg-background/95 shadow-[0_1px_0_oklch(0_0_0/0.03)] backdrop-blur-md">
+      <div className="flex h-12 min-w-0 items-center justify-between gap-3 px-3 sm:px-5">
+        <Link href="/#top" className="shrink-0 font-brand text-[0.65rem] text-ink sm:text-[0.7rem]">
           {site.shortName}
-        </a>
+        </Link>
 
-        <div className="flex items-center gap-2">
-          <nav className="mr-2 hidden items-center gap-5 sm:flex" aria-label="Primary">
+        <div className="flex min-w-0 items-center gap-2">
+          <nav className="flex min-w-0 items-center gap-2 sm:mr-2 sm:gap-5" aria-label="Primary">
             {links.map((link) => (
-              <a
+              <Link
                 key={link.href}
                 href={link.href}
-                className="text-[0.8rem] text-muted-foreground transition-colors hover:text-foreground"
+                className="whitespace-nowrap text-[0.65rem] font-medium text-muted-foreground transition-colors hover:text-foreground sm:text-[0.8rem]"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
@@ -67,43 +64,8 @@ export function SiteHeader() {
             <Sun className="theme-icon-light" aria-hidden />
             <Moon className="theme-icon-dark" aria-hidden />
           </Button>
-
-          <Button
-            type="button"
-            variant="ghost"
-            size="icon-sm"
-            className="sm:hidden"
-            aria-expanded={open}
-            aria-controls="mobile-nav"
-            aria-label={open ? "Close menu" : "Open menu"}
-            onClick={() => setOpen((v) => !v)}
-          >
-            {open ? <X /> : <Menu />}
-          </Button>
         </div>
       </div>
-
-      <nav
-        id="mobile-nav"
-        className={cn(
-          "border-t border-border px-4 py-3 sm:hidden",
-          open ? "block" : "hidden"
-        )}
-        aria-label="Mobile"
-      >
-        <div className="flex flex-col gap-2">
-          {links.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="py-1 text-sm text-foreground"
-              onClick={() => setOpen(false)}
-            >
-              {link.label}
-            </a>
-          ))}
-        </div>
-      </nav>
     </header>
   );
 }
