@@ -28,8 +28,10 @@ export type WorkItem = {
   scene: SceneKey;
   /** Short caption under the animation explaining what's moving. */
   caption: string;
-  /** Show in the home page project switcher. */
+  /** Show on the home page. */
   featured?: boolean;
+  /** Show the 3D viewer on this project's page. */
+  hasModel?: boolean;
 };
 
 export const disciplines: { name: Discipline; blurb: string }[] = [
@@ -118,6 +120,7 @@ export const work: WorkItem[] = [
     caption:
       "Real crank-slider motion: the displacer leads the power piston by 90°, shuttling gas from the hot end to the cold end.",
     featured: true,
+    hasModel: true,
   },
   {
     id: "universal-joint",

@@ -27,14 +27,14 @@ node scripts/generate-models.mjs
 
 ## SolidWorks → web viewer
 
-The CAD Lab ([/cad](http://127.0.0.1:4317/cad)) collects every project with an animated drawing and a list of what I did. Projects live in `src/data/work.ts`; their animations live in `src/components/work/scenes.tsx`. The 3D viewer at the bottom loads STL/GLB files registered in `src/data/models.ts`.
+The CAD Lab ([/cad](http://127.0.0.1:4317/cad)) is a grid of every project; each opens its own page (`/cad/<id>`) with an animated drawing and a list of what I did. Projects live in `src/data/work.ts`; their animations live in `src/components/work/scenes.tsx`. Projects with `hasModel` also show the 3D viewer, which loads STL/GLB files registered in `src/data/models.ts`.
 
 See **[docs/cad-lab-solidworks.md](docs/cad-lab-solidworks.md)** for the full guide.
 
 ## Project layout
 
 - `docs/cad-lab-solidworks.md` — SolidWorks → CAD Lab guide
-- `src/app/cad` — CAD Lab page
+- `src/app/cad` — CAD Lab grid; `src/app/cad/[id]` — one page per project
 - `src/data/work.ts` — every project shown in the CAD Lab
 - `src/components/work/` — animated project scenes
 - `src/components/cad/` — CAD viewport + lab UI
