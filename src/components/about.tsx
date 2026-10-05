@@ -16,18 +16,26 @@ const connectIcons = {
 export function About() {
   return (
     <section id="about" className="scroll-mt-14 px-4 py-6 sm:px-5">
-      <div className="flex flex-col gap-3">
-        <h2 className="section-rule text-base font-semibold text-ink">About</h2>
-        <ul className="flex flex-col gap-2.5 text-sm leading-relaxed text-muted-foreground">
-          {about.bullets.map((item) => (
-            <li
-              key={item}
-              className="relative pl-3.5 before:absolute before:left-0 before:content-['•']"
-            >
-              {item}
-            </li>
+      <div className="flex flex-col gap-4">
+        <h2 className="section-rule text-base font-semibold text-ink">{about.heading}</h2>
+        <div className="flex max-w-[62ch] flex-col gap-3 text-sm leading-relaxed text-muted-foreground">
+          {about.intro.map((paragraph) => (
+            <p key={paragraph}>{paragraph}</p>
           ))}
-        </ul>
+        </div>
+        <dl className="overflow-hidden rounded-lg border border-border text-sm">
+          {about.facts.map((fact) => (
+            <div
+              key={fact.label}
+              className="flex flex-col gap-0.5 border-b border-border px-3 py-2.5 last:border-b-0 sm:flex-row sm:gap-4"
+            >
+              <dt className="w-28 shrink-0 text-xs font-semibold text-foreground sm:pt-px">
+                {fact.label}
+              </dt>
+              <dd className="leading-relaxed text-muted-foreground">{fact.value}</dd>
+            </div>
+          ))}
+        </dl>
       </div>
     </section>
   );
