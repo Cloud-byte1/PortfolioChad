@@ -9,7 +9,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { CadLab } from "@/components/cad/cad-lab";
 import { Reveal } from "@/components/reveal";
 import { SceneView } from "@/components/work/scene-view";
-import { projectHref, sceneTransitionName } from "@/components/work/project-switcher";
+import { projectHref, sceneTransitionName } from "@/components/work/links";
 import { work } from "@/data/work";
 import { site } from "@/data/portfolio";
 import { cn } from "@/lib/utils";

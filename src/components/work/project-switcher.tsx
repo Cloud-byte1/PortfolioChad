@@ -14,12 +14,8 @@ import {
 } from "@hugeicons/core-free-icons";
 import { work } from "@/data/work";
 import { SceneView } from "@/components/work/scene-view";
+import { projectHref, sceneTransitionName } from "@/components/work/links";
 import { cn } from "@/lib/utils";
-
-export const projectHref = (id: string) => `/cad/${id}`;
-
-/** Shared name so the preview's figure morphs into the project page's first figure. */
-export const sceneTransitionName = (id: string) => `scene-${id}`;
 
 const icons = {
   fairlie: GolfBallIcon,
