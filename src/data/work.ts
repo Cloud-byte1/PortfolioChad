@@ -1,5 +1,5 @@
 /**
- * Everything shown in the CAD Lab. Each project is told through one or
+ * Every project on the site. Each project is told through one or
  * more figures: an interactive isometric scene (components/work/scenes.tsx)
  * paired with what Chad did on that part.
  */
@@ -34,8 +34,6 @@ export type WorkItem = {
   summary: string;
   tools: string[];
   figures: Figure[];
-  /** Show the 3D viewer on this project's page. */
-  hasModel?: boolean;
 };
 
 export const disciplines: { name: Discipline; blurb: string }[] = [
@@ -140,7 +138,6 @@ export const work: WorkItem[] = [
     summary:
       "A full Stirling engine assembly modeled in SolidWorks.",
     tools: ["SolidWorks"],
-    hasModel: true,
     figures: [
       {
         scene: "stirling",

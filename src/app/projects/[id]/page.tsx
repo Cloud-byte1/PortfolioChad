@@ -6,7 +6,6 @@ import { ArrowLeft } from "lucide-react";
 import { SiteShell } from "@/components/site-shell";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-import { CadLab } from "@/components/cad/cad-lab";
 import { Reveal } from "@/components/reveal";
 import { SceneView } from "@/components/work/scene-view";
 import { projectHref, sceneTransitionName } from "@/components/work/links";
@@ -20,7 +19,7 @@ export function generateStaticParams() {
   return work.map((item) => ({ id: item.id }));
 }
 
-export async function generateMetadata({ params }: PageProps<"/cad/[id]">): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps<"/projects/[id]">): Promise<Metadata> {
   const { id } = await params;
   const item = work.find((entry) => entry.id === id);
   if (!item) return {};
@@ -30,7 +29,7 @@ export async function generateMetadata({ params }: PageProps<"/cad/[id]">): Prom
   };
 }
 
-export default async function ProjectPage({ params }: PageProps<"/cad/[id]">) {
+export default async function ProjectPage({ params }: PageProps<"/projects/[id]">) {
   const { id } = await params;
   const index = work.findIndex((entry) => entry.id === id);
   if (index === -1) notFound();
@@ -46,11 +45,11 @@ export default async function ProjectPage({ params }: PageProps<"/cad/[id]">) {
       <main>
         <header className="flex flex-col gap-4 border-b border-border px-4 pt-5 pb-6 sm:px-5">
           <Link
-            href="/cad"
+            href="/projects"
             className="inline-flex w-fit items-center gap-1.5 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
           >
             <ArrowLeft className="size-3.5" aria-hidden />
-            CAD Lab
+            All projects
           </Link>
           <div className="flex flex-col gap-2">
             <p className="text-xs font-medium text-muted-foreground">{item.discipline}</p>
@@ -114,12 +113,6 @@ export default async function ProjectPage({ params }: PageProps<"/cad/[id]">) {
             </Reveal>
           );
         })}
-
-        {item.hasModel ? (
-          <Reveal>
-            <CadLab />
-          </Reveal>
-        ) : null}
 
         <nav aria-label="More projects" className="grid grid-cols-2 border-t border-border text-xs">
           <Link

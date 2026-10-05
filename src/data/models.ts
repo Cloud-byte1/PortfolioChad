@@ -8,8 +8,6 @@ export type CadModel = {
   src: string;
   format: CadModelFormat;
   sourceNote?: string;
-  /** Optional download of original SolidWorks file (not renderable in-browser) */
-  sourceDownload?: string;
 };
 
 /**
@@ -21,10 +19,9 @@ export const cadModels: CadModel[] = [
     id: "stirling-engine",
     title: "Stirling Engine",
     description:
-      "A simplified 3D stand-in for my SolidWorks Stirling engine. The original assembly file is linked below.",
+      "A simplified 3D model of the Stirling engine.",
     src: "/models/stirling-engine.stl",
     format: "stl",
     sourceNote: "Stirling engine (simplified)",
-    sourceDownload: "/models/source/Stirling_Engine.SLDASM",
   },
 ];

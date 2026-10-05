@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { ProjectSwitcher } from "@/components/work/project-switcher";
 
 export function Projects() {
@@ -14,13 +13,6 @@ export function Projects() {
         </div>
 
         <ProjectSwitcher />
-
-        <Link
-          href="/cad"
-          className="w-fit text-sm font-medium text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground"
-        >
-          Go to the CAD Lab
-        </Link>
       </div>
     </section>
   );
