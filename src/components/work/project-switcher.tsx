@@ -1,57 +1,60 @@
 "use client";
 
-import { useState } from "react";
+import { useState, ViewTransition } from "react";
 import Link from "next/link";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   CircleArrowUpRight02Icon,
-  CpuIcon,
   DatabaseIcon,
+  EngineIcon,
   GolfBallIcon,
   Settings02Icon,
+  SmartPhone01Icon,
 } from "@hugeicons/core-free-icons";
-import { featuredWork } from "@/data/work";
+import { work } from "@/data/work";
 import { SceneView } from "@/components/work/scene-view";
+import { projectHref, sceneTransitionName } from "@/components/work/links";
 import { cn } from "@/lib/utils";
 
-const projectIcons = {
-  "fairlie-mat": GolfBallIcon,
-  "fairlie-board": CpuIcon,
-  "stirling-engine": Settings02Icon,
+const icons = {
+  fairlie: GolfBallIcon,
   nas: DatabaseIcon,
+  "stirling-engine": Settings02Icon,
+  "v8-engine": EngineIcon,
+  "college-app": SmartPhone01Icon,
 } as const;
 
-export default function BentoCard() {
+/** Every project as a tab; the panel previews the selected one and opens its page. */
+export function ProjectSwitcher() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const active = featuredWork[activeIndex];
+  const active = work[activeIndex];
+  const figure = active.figures[0];
 
   return (
     <div className="overflow-hidden rounded-xl border border-border bg-card shadow-[0_12px_35px_oklch(0_0_0/0.06)]">
-      <div className="grid sm:grid-cols-[10.5rem_1fr]">
+      <div className="grid sm:grid-cols-[11rem_1fr]">
         <LayoutGroup>
           <div
             role="tablist"
-            aria-label="Featured projects"
+            aria-label="Projects"
             className="flex gap-1 overflow-x-auto border-b border-border bg-muted/15 p-2 sm:flex-col sm:border-r sm:border-b-0 sm:pt-4"
           >
-            {featuredWork.map((project, index) => {
+            {work.map((project, index) => {
               const isActive = index === activeIndex;
-              const Icon =
-                projectIcons[project.id as keyof typeof projectIcons] ?? CpuIcon;
-
+              const Icon = icons[project.id as keyof typeof icons] ?? Settings02Icon;
               return (
                 <button
                   key={project.id}
                   type="button"
                   role="tab"
+                  id={`tab-${project.id}`}
                   aria-selected={isActive}
+                  aria-controls="project-panel"
                   onClick={() => setActiveIndex(index)}
                   className={cn(
-                    "relative flex shrink-0 items-center gap-2 rounded-md px-3 py-2 text-left text-[0.7rem] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-                    isActive
-                      ? "text-foreground"
-                      : "text-muted-foreground hover:text-foreground"
+                    "relative flex shrink-0 items-center gap-2 rounded-md px-3 py-2 text-left text-[0.72rem] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
+                    isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   {isActive && (
@@ -69,7 +72,12 @@ export default function BentoCard() {
           </div>
         </LayoutGroup>
 
-        <div role="tabpanel" className="relative flex min-w-0 flex-col p-4 sm:p-5">
+        <div
+          role="tabpanel"
+          id="project-panel"
+          aria-labelledby={`tab-${active.id}`}
+          className="relative flex min-w-0 flex-col p-3 sm:p-4"
+        >
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={active.id}
@@ -79,28 +87,26 @@ export default function BentoCard() {
               transition={{ duration: 0.2 }}
               className="flex flex-col gap-4"
             >
-              <SceneView scene={active.scene} label={active.caption} />
+              <ViewTransition name={sceneTransitionName(active.id)} share="morph" default="none">
+                <SceneView
+                  scene={figure.scene}
+                  label={figure.caption}
+                  fig={active.discipline}
+                  title={
+                    active.figures.length > 1 ? `Fig 1 of ${active.figures.length}` : figure.title
+                  }
+                />
+              </ViewTransition>
 
-              <div className="flex items-start justify-between gap-4">
+              <div className="flex items-start justify-between gap-4 px-1">
                 <div className="min-w-0">
-                  <h3 className="text-base font-semibold tracking-tight text-ink">
-                    {active.title}
-                  </h3>
-                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                    {active.summary}
-                  </p>
+                  <h3 className="text-base font-semibold tracking-tight text-ink">{active.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">{active.summary}</p>
                 </div>
-                <Link
-                  href={`/cad#${active.id}`}
-                  aria-label={`Read more about ${active.title} in the CAD Lab`}
-                  className="grid size-8 shrink-0 place-items-center rounded-md border border-border transition-colors hover:bg-muted"
-                >
-                  <HugeiconsIcon icon={CircleArrowUpRight02Icon} size={15} />
-                </Link>
               </div>
 
-              <ul className="flex flex-col gap-1.5 text-[0.8rem] leading-relaxed text-muted-foreground">
-                {active.did.slice(0, 2).map((line) => (
+              <ul className="flex flex-col gap-1.5 px-1 text-[0.8rem] leading-relaxed text-muted-foreground">
+                {figure.did.slice(0, 2).map((line) => (
                   <li
                     key={line}
                     className="relative pl-3.5 before:absolute before:top-[0.6em] before:left-0 before:size-1 before:rounded-full before:bg-foreground/50"
@@ -110,9 +116,9 @@ export default function BentoCard() {
                 ))}
               </ul>
 
-              <div className="flex flex-wrap items-center justify-between gap-3">
+              <div className="flex flex-wrap items-center justify-between gap-3 px-1 pb-1">
                 <ul className="flex flex-wrap gap-1.5" aria-label="Tools">
-                  {active.tools.map((tool) => (
+                  {active.tools.slice(0, 4).map((tool) => (
                     <li
                       key={tool}
                       className="rounded-full border border-border px-2.5 py-0.5 text-[0.68rem] font-medium text-foreground"
@@ -122,10 +128,11 @@ export default function BentoCard() {
                   ))}
                 </ul>
                 <Link
-                  href={`/cad#${active.id}`}
-                  className="text-xs font-medium text-foreground underline-offset-2 hover:underline"
+                  href={projectHref(active.id)}
+                  className="inline-flex h-8 items-center gap-1.5 rounded-full bg-primary px-3.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 >
-                  Full write-up
+                  Open project
+                  <HugeiconsIcon icon={CircleArrowUpRight02Icon} size={14} aria-hidden />
                 </Link>
               </div>
             </motion.div>

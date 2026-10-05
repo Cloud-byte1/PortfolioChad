@@ -99,6 +99,12 @@
   --viewport: oklch(0.955 0.003 260);
   --viewport-grid: oklch(0.72 0.005 260);
   --viewport-grid-fine: oklch(0.88 0.004 260);
+  /* Isometric scene faces: lit top, mid left, shaded right. */
+  --face-t: oklch(0.995 0.002 260);
+  --face-l: oklch(0.95 0.004 260);
+  --face-r: oklch(0.895 0.006 260);
+  --edge: oklch(0.3 0.01 260 / 0.62);
+  --screen: oklch(0.93 0.005 260);
 }
 
 [data-theme="dark"] {
@@ -106,6 +112,11 @@
   --viewport: oklch(0.15 0.004 260);
   --viewport-grid: oklch(0.36 0.005 260);
   --viewport-grid-fine: oklch(0.23 0.004 260);
+  --face-t: oklch(0.255 0.004 260);
+  --face-l: oklch(0.205 0.004 260);
+  --face-r: oklch(0.165 0.004 260);
+  --edge: oklch(1 0 0 / 0.3);
+  --screen: oklch(0.15 0.004 260);
   color-scheme: dark;
   --page: oklch(0.08 0 0);
   --background: oklch(0.105 0 0);
@@ -200,19 +211,73 @@
 /* Project scene drawings (components/work/scenes.tsx) */
 .scene {
   color: var(--ink);
+  font-family: var(--font-body), ui-sans-serif, sans-serif;
+  font-size: 7.5px;
+}
+.scene .ln,
+.scene .edge {
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
 }
 .scene .ln {
   fill: none;
   stroke: currentColor;
-  stroke-width: 1.2;
-  stroke-linejoin: round;
-  stroke-linecap: round;
+  stroke-width: 1.1;
 }
 .scene .ln.faint {
   stroke: var(--muted-foreground);
   stroke-opacity: 0.55;
 }
 .scene .ln.sig {
+  stroke: var(--signal);
+}
+.scene .edge {
+  stroke: var(--edge);
+  stroke-width: 0.8;
+}
+.scene .face-t {
+  fill: var(--face-t);
+}
+.scene .face-l {
+  fill: var(--face-l);
+}
+.scene .face-r {
+  fill: var(--face-r);
+}
+.scene .face-pcb {
+  fill: color-mix(in oklch, var(--signal) 9%, var(--face-t));
+}
+.scene .face-sig {
+  fill: var(--signal);
+}
+.scene .face-sig-soft {
+  fill: color-mix(in oklch, var(--signal) 28%, var(--face-t));
+}
+.scene .glass {
+  fill: var(--face-t);
+  fill-opacity: 0.12;
+  stroke-opacity: 0.55;
+}
+.scene .screen {
+  fill: var(--screen);
+}
+.scene .trace {
+  fill: none;
+  stroke: currentColor;
+  stroke-opacity: 0.75;
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+}
+.scene .ring {
+  fill: none;
+  stroke-width: 3;
+  stroke-linecap: round;
+}
+.scene .ring.faint {
+  stroke: var(--edge);
+}
+.scene .ring.sig {
   stroke: var(--signal);
 }
 .scene .fill-paper {
@@ -231,12 +296,7 @@
 .scene .fill-sig {
   fill: var(--signal);
 }
-.scene .fill-sig-soft {
-  fill: color-mix(in oklch, var(--signal) 22%, var(--background));
-}
 .scene text {
-  font-family: var(--font-body), ui-sans-serif, sans-serif;
-  font-size: 7.5px;
   fill: var(--muted-foreground);
 }
 .scene .t-ink {
@@ -247,4 +307,30 @@
 }
 .scene .t-num {
   font-variant-numeric: tabular-nums;
+}
+
+/* Sections fade up once as they scroll in (components/reveal.tsx). */
+.reveal-pending {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.8s ease,
+    transform 0.8s cubic-bezier(0.2, 0, 0, 1);
+}
+.reveal-pending.reveal-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* Project card drawing grows into the project page hero (and back). */
+::view-transition-group(.morph) {
+  animation-duration: 380ms;
+  animation-timing-function: cubic-bezier(0.2, 0, 0, 1);
+}
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
 }

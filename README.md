@@ -25,16 +25,16 @@ npm run lint
 node scripts/generate-models.mjs
 ```
 
-## SolidWorks → web viewer
+## Projects and CAD Lab
 
-The CAD Lab ([/cad](http://127.0.0.1:4317/cad)) collects every project with an animated drawing and a list of what I did. Projects live in `src/data/work.ts`; their animations live in `src/components/work/scenes.tsx`. The 3D viewer at the bottom loads STL/GLB files registered in `src/data/models.ts`.
-
-See **[docs/cad-lab-solidworks.md](docs/cad-lab-solidworks.md)** for the full guide.
+- **Projects** ([/projects](http://127.0.0.1:4317/projects)) list every project in a tab switcher (`src/components/work/project-switcher.tsx`), also used on the home page. Each project has its own page at `/projects/<id>`, told through interactive isometric figures (`src/components/work/scenes.tsx`). Project content lives in `src/data/work.ts`.
+- **CAD Lab** ([/cad](http://127.0.0.1:4317/cad)) is only for 3D renderings of CAD models. Add STL/GLB files to `public/models/` and register them in `src/data/models.ts`. See [docs/cad-lab-solidworks.md](docs/cad-lab-solidworks.md) for exporting from SolidWorks.
 
 ## Project layout
 
 - `docs/cad-lab-solidworks.md` — SolidWorks → CAD Lab guide
-- `src/app/cad` — CAD Lab page
+- `src/app/projects` — project switcher; `src/app/projects/[id]` — one page per project
+- `src/app/cad` — CAD Lab (3D model viewer)
 - `src/data/work.ts` — every project shown in the CAD Lab
 - `src/components/work/` — animated project scenes
 - `src/components/cad/` — CAD viewport + lab UI

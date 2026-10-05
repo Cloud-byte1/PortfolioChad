@@ -54,28 +54,3 @@ export function useInView<T extends Element>() {
 
   return [ref, inView] as const;
 }
-
-/**
- * A looping clock: returns t in [0, 1) that advances once per `duration` ms
- * while `running`. Pausing keeps the current frame; it starts at `rest`.
- */
-export function useLoopClock(duration: number, running: boolean, rest: number) {
-  const [t, setT] = useState(rest);
-  const elapsed = useRef(rest * duration);
-
-  useEffect(() => {
-    if (!running) return;
-    let frame = 0;
-    let last = performance.now();
-    const tick = (now: number) => {
-      elapsed.current += Math.min(now - last, 64);
-      last = now;
-      setT((elapsed.current % duration) / duration);
-      frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [running, duration]);
-
-  return t;
-}

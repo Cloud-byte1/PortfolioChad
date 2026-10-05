@@ -1,6 +1,4 @@
-"use client";
-
-import BentoCard from "@/components/bento-card";
+import { ProjectSwitcher } from "@/components/work/project-switcher";
 
 export function Projects() {
   return (
@@ -9,11 +7,12 @@ export function Projects() {
         <div className="flex flex-col gap-2">
           <h2 className="section-rule text-base font-semibold text-ink">Projects</h2>
           <p className="text-sm text-muted-foreground">
-            A few highlights. Every project, with what I did on it, lives in the CAD Lab.
+            Pick a project to preview it. Click the drawing to make it move, or open the project
+            to see what I did.
           </p>
         </div>
 
-        <BentoCard />
+        <ProjectSwitcher />
       </div>
     </section>
   );

@@ -7,8 +7,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { ArrowUpRight, Mail, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { site } from "@/data/portfolio";
-import { work } from "@/data/work";
-import { SceneView } from "@/components/work/scene-view";
+import { OrbitPreview } from "@/components/cad/orbit-preview";
 import { cn } from "@/lib/utils";
 
 type AvatarMode = "photo" | "character";
@@ -130,13 +129,13 @@ export function Hero() {
         <Link
           href="/cad"
           className="group relative flex min-h-52 min-w-0 flex-col overflow-hidden rounded-xl border border-border bg-card p-4 shadow-[0_10px_30px_oklch(0_0_0/0.04)] transition-all duration-300 hover:-translate-y-0.5 hover:border-foreground/25 hover:shadow-[0_16px_36px_oklch(0_0_0/0.09)]"
-          aria-label="Open the interactive CAD Lab"
+          aria-label="Open the CAD Lab"
         >
           <div className="flex items-start justify-between gap-3">
             <div>
               <h2 className="text-base font-semibold text-ink">CAD Lab</h2>
               <p className="mt-0.5 text-xs text-muted-foreground">
-                {work.length} projects, each one animated
+                3D renderings of my CAD models
               </p>
             </div>
             <span className="grid size-8 shrink-0 place-items-center rounded-full border border-border bg-background transition-transform duration-300 group-hover:rotate-6 group-hover:scale-105">
@@ -144,15 +143,10 @@ export function Hero() {
             </span>
           </div>
 
-          <SceneView
-            scene="stirling"
-            label="Animated Stirling engine: the flywheel turns and both pistons move 90 degrees apart."
-            controls={false}
-            className="my-3 flex-1"
-          />
+          <OrbitPreview className="my-3 min-h-24 flex-1" />
 
           <div className="flex items-center justify-between gap-3 text-[0.68rem]">
-            <span className="text-muted-foreground">Mechanisms, boards, and apps</span>
+            <span className="text-muted-foreground">Orbit, zoom, inspect</span>
             <span className="font-medium text-foreground">Enter the lab</span>
           </div>
         </Link>
