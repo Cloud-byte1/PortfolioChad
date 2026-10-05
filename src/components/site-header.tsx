@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { site } from "@/data/portfolio";
+import { toggleTheme } from "@/lib/theme";
 
 const links = [
   { href: "/#about", label: "About" },
@@ -26,16 +27,9 @@ export function SiteHeader() {
     document.documentElement.classList.toggle("dark", theme === "dark");
   }, []);
 
-  function toggleTheme() {
-    const nextTheme =
-      document.documentElement.dataset.theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.theme = nextTheme;
-    document.documentElement.classList.toggle("dark", nextTheme === "dark");
-    localStorage.setItem("theme", nextTheme);
-  }
 
   return (
-    <header className="sticky top-0 z-[100] border-b border-border bg-background/95 shadow-[0_1px_0_oklch(0_0_0/0.03)] backdrop-blur-md">
+    <header className="sticky top-0 z-[100] xl:hidden border-b border-border bg-background/95 shadow-[0_1px_0_oklch(0_0_0/0.03)] backdrop-blur-md">
       <div className="flex h-12 min-w-0 items-center justify-between gap-3 px-3 sm:px-5">
         <Link href="/#top" className="shrink-0 font-brand text-[0.65rem] text-ink sm:text-[0.7rem]">
           {site.shortName}

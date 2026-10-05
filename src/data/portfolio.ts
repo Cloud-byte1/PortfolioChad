@@ -13,11 +13,10 @@ export const site = {
     "Robotics & automation",
   ],
   photo: "/avatar/chad-linkedin.jpg",
-  character: "/avatar/chad-pixel.png",
   resume: "/resume",
   resumeFile: "/resume/Chad_Carmichael_Resume.pdf",
   social: {
-    github: "https://github.com/",
+    github: "https://github.com/Cloud-byte1",
     linkedin: "https://www.linkedin.com/in/chad-carmichael-4475b726b",
     resume: "/resume",
   },
@@ -25,17 +24,34 @@ export const site = {
 
 export const about = {
   heading: "About",
-  bullets: [
-    "I’m Chad Carmichael — a junior mechanical engineering student at Florida State University (Vires Scholar, IB Diploma) passionate about robotics and automation.",
-    "I work across mechanical systems, SolidWorks CAD, embedded software (ESP32 / nRF52840), and team-based product builds like FairLie.",
-    "I want internship or co-op roles where I can apply CAD, sensors, and manufacturing docs early — and learn from engineers shipping real hardware.",
+  intro: [
+    "I’m a mechanical engineering student at Florida State University who likes building things end to end: the CAD, the circuit board, the firmware, and the app that ties them together.",
+    "Most of that has gone into FairLie, a smart golf training mat. I architected its three-board sensor system, designed the control PCB and printed housings, and debugged it all the way through prototype bring-up. Outside of that I model engines in SolidWorks, run a file server I built myself, and co-founded EZclickAI and C2x Visuals, where we’ve grown client brands past 1M combined views.",
+  ],
+  facts: [
+    {
+      label: "Studying",
+      value: "B.S. Mechanical Engineering, Florida State University. Expected May 2028.",
+    },
+    {
+      label: "Honors",
+      value: "Vires Scholar ($16,000 merit scholarship), IB Diploma",
+    },
+    {
+      label: "Involved in",
+      value: "NSBE NextGen committee, SMILI, ASCE/FES 3D Printing Team",
+    },
+    {
+      label: "Looking for",
+      value: "Internships and co-ops in robotics, automation, and hardware",
+    },
   ],
 } as const;
 
 export const connect = [
   { label: "Resume", href: "/resume" },
   { label: "Contact", href: "#contact" },
-  { label: "GitHub", href: "https://github.com/" },
+  { label: "GitHub", href: "https://github.com/Cloud-byte1" },
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/in/chad-carmichael-4475b726b",
@@ -46,7 +62,7 @@ export const connect = [
 export const experience = [
   {
     company: "Florida State University",
-    role: "B.S. Mechanical Engineering · Expected May 2029",
+    role: "B.S. Mechanical Engineering · Expected May 2028",
     period: "Present",
     detail: "Vires Scholar — $16,000 merit scholarship over 8 semesters.",
   },

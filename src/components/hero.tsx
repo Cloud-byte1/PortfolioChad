@@ -8,13 +8,9 @@ import { ArrowUpRight, Mail, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { site } from "@/data/portfolio";
 import { OrbitPreview } from "@/components/cad/orbit-preview";
-import { cn } from "@/lib/utils";
-
-type AvatarMode = "photo" | "character";
 
 export function Hero() {
   const [roleIndex, setRoleIndex] = useState(0);
-  const [avatarMode, setAvatarMode] = useState<AvatarMode>("photo");
 
   useEffect(() => {
     const id = window.setInterval(() => {
@@ -23,65 +19,19 @@ export function Hero() {
     return () => window.clearInterval(id);
   }, []);
 
-  function toggleAvatar() {
-    setAvatarMode((current) => {
-      return current === "photo" ? "character" : "photo";
-    });
-  }
-
   return (
     <section id="top" className="px-4 pt-6 pb-2 sm:px-5">
       <div className="grid min-w-0 grid-cols-[minmax(0,1fr)] gap-3 sm:grid-cols-[minmax(0,1.35fr)_minmax(0,0.9fr)]">
         <div className="flex min-w-0 flex-col gap-5 rounded-xl border border-border bg-card p-4 shadow-[0_10px_30px_oklch(0_0_0/0.04)]">
           <div className="flex items-start gap-4">
-            <div className="flex shrink-0 flex-col items-center gap-1.5">
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.div
-                  key={avatarMode}
-                  initial={{ opacity: 0, scale: 0.96 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.96 }}
-                  transition={{ duration: 0.16 }}
-                >
-                  <Image
-                    src={avatarMode === "photo" ? site.photo : site.character}
-                    alt={
-                      avatarMode === "photo"
-                        ? `${site.name} profile photo`
-                        : `${site.name} pixel character`
-                    }
-                    width={96}
-                    height={96}
-                    priority
-                    className={cn(
-                      "size-16 rounded-lg border border-border object-cover sm:size-[4.5rem]",
-                      avatarMode === "character" && "[image-rendering:pixelated]"
-                    )}
-                  />
-                </motion.div>
-              </AnimatePresence>
-              <div className="flex items-center justify-center">
-                <button
-                  type="button"
-                  role="switch"
-                  aria-checked={avatarMode === "character"}
-                  aria-label="Toggle between profile photo and pixel character"
-                  onClick={toggleAvatar}
-                  className={cn(
-                    "relative h-5 w-9 rounded-full border border-border p-0.5 transition-colors",
-                    "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
-                    avatarMode === "character" ? "bg-ink" : "bg-muted"
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "block size-3.5 rounded-full border border-border bg-background shadow-sm transition-transform duration-200",
-                      avatarMode === "character" && "translate-x-4"
-                    )}
-                  />
-                </button>
-              </div>
-            </div>
+            <Image
+              src={site.photo}
+              alt={`${site.name} profile photo`}
+              width={96}
+              height={96}
+              priority
+              className="size-16 shrink-0 rounded-lg border border-border object-cover sm:size-[4.5rem]"
+            />
             <div className="flex min-w-0 flex-col gap-2 pt-0.5">
               <h1 className="text-[1.65rem] font-bold leading-tight tracking-tight text-ink sm:text-3xl">
                 {site.name}
@@ -100,6 +50,13 @@ export function Hero() {
                   </motion.span>
                 </AnimatePresence>
               </div>
+              <p className="flex w-fit items-center gap-2 rounded-full border border-[color-mix(in_oklch,var(--c-turf)_45%,transparent)] bg-[color-mix(in_oklch,var(--c-turf)_10%,transparent)] px-2.5 py-0.5 text-[0.7rem] font-medium text-[var(--c-turf-ink)] xl:hidden">
+                <span className="relative flex size-2" aria-hidden>
+                  <span className="absolute inset-0 animate-ping rounded-full bg-[var(--c-turf)] opacity-60 motion-reduce:animate-none" />
+                  <span className="relative size-2 rounded-full bg-[var(--c-turf)]" />
+                </span>
+                Open to internships
+              </p>
               <div className="flex flex-wrap gap-2 pt-1">
                 <Button asChild size="sm" className="h-8 rounded-full px-3.5 text-xs">
                   <a href="#contact">
