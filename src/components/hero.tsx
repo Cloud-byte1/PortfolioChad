@@ -136,7 +136,7 @@ export function Hero() {
             <div>
               <h2 className="text-base font-semibold text-ink">CAD Lab</h2>
               <p className="mt-0.5 text-xs text-muted-foreground">
-                {work.length} projects, each one animated
+                {work.length} projects you can play with
               </p>
             </div>
             <span className="grid size-8 shrink-0 place-items-center rounded-full border border-border bg-background transition-transform duration-300 group-hover:rotate-6 group-hover:scale-105">
@@ -147,7 +147,7 @@ export function Hero() {
           <SceneView
             scene="stirling"
             label="Animated Stirling engine: the flywheel turns and both pistons move 90 degrees apart."
-            controls={false}
+            mode="hover"
             className="my-3 flex-1"
           />
 
