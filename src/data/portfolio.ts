@@ -13,7 +13,6 @@ export const site = {
     "Robotics & automation",
   ],
   photo: "/avatar/chad-linkedin.jpg",
-  character: "/avatar/chad-pixel.png",
   resume: "/resume",
   resumeFile: "/resume/Chad_Carmichael_Resume.pdf",
   social: {
@@ -27,12 +26,12 @@ export const about = {
   heading: "About",
   intro: [
     "I’m a mechanical engineering student at Florida State University who likes building things end to end: the CAD, the circuit board, the firmware, and the app that ties them together.",
-    "Most of that has gone into FairLie, a smart golf training mat. I architected its three-board sensor system, designed the control PCB and printed housings, and worked directly with the contract manufacturer to get it built. Outside of that I model engines in SolidWorks, run a file server I built myself, and co-founded EZclickAI and C2x Visuals, where we’ve grown client brands past 1M combined views.",
+    "Most of that has gone into FairLie, a smart golf training mat. I architected its three-board sensor system, designed the control PCB and printed housings, and debugged it all the way through prototype bring-up. Outside of that I model engines in SolidWorks, run a file server I built myself, and co-founded EZclickAI and C2x Visuals, where we’ve grown client brands past 1M combined views.",
   ],
   facts: [
     {
       label: "Studying",
-      value: "B.S. Mechanical Engineering, Florida State University. Expected May 2029, 3.8 GPA.",
+      value: "B.S. Mechanical Engineering, Florida State University. Expected May 2028.",
     },
     {
       label: "Honors",
@@ -63,7 +62,7 @@ export const connect = [
 export const experience = [
   {
     company: "Florida State University",
-    role: "B.S. Mechanical Engineering · Expected May 2029",
+    role: "B.S. Mechanical Engineering · Expected May 2028",
     period: "Present",
     detail: "Vires Scholar — $16,000 merit scholarship over 8 semesters.",
   },
