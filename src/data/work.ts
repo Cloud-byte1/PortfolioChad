@@ -17,6 +17,9 @@ export type SceneKey =
 
 export type Discipline = "Products" | "Mechanisms" | "Software";
 
+/** Each project owns one accent color (tokens in globals.css). */
+export type Accent = "turf" | "cobalt" | "flame" | "race" | "violet";
+
 export type Figure = {
   scene: SceneKey;
   title: string;
@@ -32,6 +35,7 @@ export type WorkItem = {
   discipline: Discipline;
   /** One or two lines: what the thing is. */
   summary: string;
+  accent: Accent;
   tools: string[];
   figures: Figure[];
 };
@@ -58,6 +62,7 @@ export const work: WorkItem[] = [
     discipline: "Products",
     summary:
       "A smart golf training mat (built under the TurfTrack name) that reads every strike with pressure pads, an IMU, and 60 GHz radar, then scores it on an iPhone app. I worked on the sensors, the board, the printed housings, and the app.",
+    accent: "turf",
     tools: ["ESP-IDF / C", "KiCad", "Fusion 360", "CadQuery", "SwiftUI", "BLE", "Supabase"],
     figures: [
       {
@@ -116,6 +121,7 @@ export const work: WorkItem[] = [
     discipline: "Products",
     summary:
       "A mini-ITX file server with 8 TB of storage and a program that sorts my files for me.",
+    accent: "cobalt",
     tools: ["SolidWorks", "Cursor", "Systems"],
     figures: [
       {
@@ -137,6 +143,7 @@ export const work: WorkItem[] = [
     discipline: "Mechanisms",
     summary:
       "A full Stirling engine assembly modeled in SolidWorks.",
+    accent: "flame",
     tools: ["SolidWorks"],
     figures: [
       {
@@ -156,6 +163,7 @@ export const work: WorkItem[] = [
     title: "V8 engine",
     discipline: "Mechanisms",
     summary: "A V8 engine assembly modeled in SolidWorks.",
+    accent: "race",
     tools: ["SolidWorks"],
     figures: [
       {
@@ -176,6 +184,7 @@ export const work: WorkItem[] = [
     discipline: "Software",
     summary:
       "A full-stack iOS app for discovering universities by swiping, plus an LLM pipeline that cleaned 300,000+ raw records into 1,000+ validated profiles.",
+    accent: "violet",
     tools: ["React Native", "Expo", "Python", "ChatGPT API"],
     figures: [
       {

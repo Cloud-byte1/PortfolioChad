@@ -6,6 +6,7 @@ import type { SceneKey } from "@/data/work";
 import { scenes, type SceneState } from "@/components/work/scenes";
 import { useInView, usePrefersReducedMotion } from "@/lib/motion-hooks";
 import { cn } from "@/lib/utils";
+import { accentStyle } from "@/components/work/links";
 
 const noop = () => () => {};
 
@@ -22,6 +23,8 @@ type SceneViewProps = {
    * "hover": for scenes inside a link; pointing at the card runs the action.
    */
   mode?: "interactive" | "hover";
+  /** Project accent (turf, cobalt, …); scenes draw their moving parts in it. */
+  accent?: string;
   className?: string;
 };
 
@@ -31,6 +34,7 @@ export function SceneView({
   fig,
   title,
   mode = "interactive",
+  accent,
   className,
 }: SceneViewProps) {
   const spec = scenes[scene];
@@ -104,6 +108,7 @@ export function SceneView({
     <div
       ref={ref}
       onPointerEnter={mode === "hover" ? trigger : undefined}
+      style={accent ? accentStyle(accent) : undefined}
       className={cn(
         "relative flex flex-col overflow-hidden rounded-xl border border-border bg-mist dot-grid",
         className
@@ -111,7 +116,7 @@ export function SceneView({
     >
       {fig || title ? (
         <div className="flex items-center justify-between gap-3 px-3 pt-2.5 text-[0.68rem] text-muted-foreground">
-          <span className="font-semibold text-foreground">{fig}</span>
+          <span className="font-semibold text-[var(--accent-ink,var(--foreground))]">{fig}</span>
           <span className="truncate">{title}</span>
         </div>
       ) : null}

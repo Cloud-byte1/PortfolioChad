@@ -5,7 +5,7 @@ export function Projects() {
     <section id="projects" className="scroll-mt-14 px-4 py-6 sm:px-5">
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          <h2 className="section-rule text-base font-semibold text-ink">Projects</h2>
+          <h2 className="section-rule text-base font-semibold text-ink" style={{ "--rule": "var(--c-turf)" } as React.CSSProperties}>Projects</h2>
           <p className="text-sm text-muted-foreground">
             Pick a project to preview it. Click the drawing to make it move, or open the project
             to see what I did.

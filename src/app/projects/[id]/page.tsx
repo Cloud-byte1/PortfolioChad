@@ -8,7 +8,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { Reveal } from "@/components/reveal";
 import { SceneView } from "@/components/work/scene-view";
-import { projectHref, sceneTransitionName } from "@/components/work/links";
+import { accentStyle, projectHref, sceneTransitionName } from "@/components/work/links";
 import { work } from "@/data/work";
 import { site } from "@/data/portfolio";
 import { cn } from "@/lib/utils";
@@ -42,7 +42,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[id]"
   return (
     <SiteShell>
       <SiteHeader />
-      <main>
+      <main style={accentStyle(item.accent)}>
         <header className="flex flex-col gap-4 border-b border-border px-4 pt-5 pb-6 sm:px-5">
           <Link
             href="/projects"
@@ -52,15 +52,18 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[id]"
             All projects
           </Link>
           <div className="flex flex-col gap-2">
-            <p className="text-xs font-medium text-muted-foreground">{item.discipline}</p>
+            <p className="w-fit rounded-full bg-[color-mix(in_oklch,var(--accent)_14%,transparent)] px-2.5 py-0.5 text-xs font-semibold text-[var(--accent-ink)]">
+              {item.discipline}
+            </p>
             <h1 className="text-3xl font-bold tracking-tight text-ink">{item.title}</h1>
+            <span className="h-1 w-12 rounded-full bg-[var(--accent)]" aria-hidden />
             <p className="max-w-[62ch] text-sm leading-relaxed text-muted-foreground">{item.summary}</p>
           </div>
           <ul className="flex flex-wrap gap-1.5" aria-label="Tools">
             {item.tools.map((tool) => (
               <li
                 key={tool}
-                className="rounded-full border border-border px-2.5 py-0.5 text-[0.7rem] font-medium text-foreground"
+                className="rounded-full border border-[color-mix(in_oklch,var(--accent)_40%,transparent)] bg-[color-mix(in_oklch,var(--accent)_10%,transparent)] px-2.5 py-0.5 text-[0.7rem] font-medium text-[var(--accent-ink)]"
               >
                 {tool}
               </li>
@@ -102,7 +105,7 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[id]"
                     {figure.did.map((line) => (
                       <li
                         key={line}
-                        className="relative pl-3.5 before:absolute before:top-[0.6em] before:left-0 before:size-1 before:rounded-full before:bg-foreground/50"
+                        className="relative pl-3.5 before:absolute before:top-[0.6em] before:left-0 before:size-1.5 before:rounded-full before:bg-[var(--accent)]"
                       >
                         {line}
                       </li>
@@ -120,14 +123,20 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[id]"
             className="flex flex-col gap-0.5 border-r border-border px-4 py-4 transition-colors hover:bg-muted sm:px-5"
           >
             <span className="text-muted-foreground">Previous</span>
-            <span className="font-semibold text-foreground">{previous.title}</span>
+            <span className="inline-flex items-center gap-1.5 font-semibold text-foreground">
+              <span className="size-2 rounded-full" style={{ background: `var(--c-${previous.accent})` }} aria-hidden />
+              {previous.title}
+            </span>
           </Link>
           <Link
             href={projectHref(next.id)}
             className="flex flex-col items-end gap-0.5 px-4 py-4 text-right transition-colors hover:bg-muted sm:px-5"
           >
             <span className="text-muted-foreground">Next</span>
-            <span className="font-semibold text-foreground">{next.title}</span>
+            <span className="inline-flex items-center gap-1.5 font-semibold text-foreground">
+              {next.title}
+              <span className="size-2 rounded-full" style={{ background: `var(--c-${next.accent})` }} aria-hidden />
+            </span>
           </Link>
         </nav>
       </main>

@@ -17,7 +17,7 @@ export const site = {
   resume: "/resume",
   resumeFile: "/resume/Chad_Carmichael_Resume.pdf",
   social: {
-    github: "https://github.com/",
+    github: "https://github.com/Cloud-byte1",
     linkedin: "https://www.linkedin.com/in/chad-carmichael-4475b726b",
     resume: "/resume",
   },
@@ -52,7 +52,7 @@ export const about = {
 export const connect = [
   { label: "Resume", href: "/resume" },
   { label: "Contact", href: "#contact" },
-  { label: "GitHub", href: "https://github.com/" },
+  { label: "GitHub", href: "https://github.com/Cloud-byte1" },
   {
     label: "LinkedIn",
     href: "https://www.linkedin.com/in/chad-carmichael-4475b726b",

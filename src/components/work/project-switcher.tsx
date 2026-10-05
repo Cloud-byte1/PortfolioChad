@@ -14,7 +14,7 @@ import {
 } from "@hugeicons/core-free-icons";
 import { work } from "@/data/work";
 import { SceneView } from "@/components/work/scene-view";
-import { projectHref, sceneTransitionName } from "@/components/work/links";
+import { accentStyle, projectHref, sceneTransitionName } from "@/components/work/links";
 import { cn } from "@/lib/utils";
 
 const icons = {
@@ -52,6 +52,7 @@ export function ProjectSwitcher() {
                   aria-selected={isActive}
                   aria-controls="project-panel"
                   onClick={() => setActiveIndex(index)}
+                  style={accentStyle(project.accent)}
                   className={cn(
                     "relative flex shrink-0 items-center gap-2 rounded-md px-3 py-2 text-left text-[0.72rem] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
                     isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground"
@@ -60,11 +61,11 @@ export function ProjectSwitcher() {
                   {isActive && (
                     <motion.span
                       layoutId="project-active-tab"
-                      className="absolute inset-0 rounded-md border border-border bg-background shadow-sm"
+                      className="absolute inset-0 rounded-md border border-[color-mix(in_oklch,var(--accent)_45%,transparent)] bg-[color-mix(in_oklch,var(--accent)_12%,var(--background))] shadow-sm"
                       transition={{ type: "spring", stiffness: 320, damping: 28 }}
                     />
                   )}
-                  <HugeiconsIcon icon={Icon} size={14} className="relative z-10 shrink-0" />
+                  <HugeiconsIcon icon={Icon} size={15} className="relative z-10 shrink-0 text-[var(--accent)]" />
                   <span className="relative z-10 max-w-32 truncate">{project.title}</span>
                 </button>
               );
@@ -76,6 +77,7 @@ export function ProjectSwitcher() {
           role="tabpanel"
           id="project-panel"
           aria-labelledby={`tab-${active.id}`}
+          style={accentStyle(active.accent)}
           className="relative flex min-w-0 flex-col p-3 sm:p-4"
         >
           <AnimatePresence mode="wait" initial={false}>
@@ -109,7 +111,7 @@ export function ProjectSwitcher() {
                 {figure.did.slice(0, 2).map((line) => (
                   <li
                     key={line}
-                    className="relative pl-3.5 before:absolute before:top-[0.6em] before:left-0 before:size-1 before:rounded-full before:bg-foreground/50"
+                    className="relative pl-3.5 before:absolute before:top-[0.6em] before:left-0 before:size-1.5 before:rounded-full before:bg-[var(--accent)]"
                   >
                     {line}
                   </li>
@@ -121,7 +123,7 @@ export function ProjectSwitcher() {
                   {active.tools.slice(0, 4).map((tool) => (
                     <li
                       key={tool}
-                      className="rounded-full border border-border px-2.5 py-0.5 text-[0.68rem] font-medium text-foreground"
+                      className="rounded-full border border-[color-mix(in_oklch,var(--accent)_40%,transparent)] bg-[color-mix(in_oklch,var(--accent)_10%,transparent)] px-2.5 py-0.5 text-[0.68rem] font-medium text-[var(--accent-ink)]"
                     >
                       {tool}
                     </li>
@@ -132,7 +134,7 @@ export function ProjectSwitcher() {
                   className="inline-flex h-8 items-center gap-1.5 rounded-full bg-primary px-3.5 text-xs font-medium text-primary-foreground transition-opacity hover:opacity-90 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
                 >
                   Open project
-                  <HugeiconsIcon icon={CircleArrowUpRight02Icon} size={14} aria-hidden />
+                  <HugeiconsIcon icon={CircleArrowUpRight02Icon} size={14} className="text-[var(--accent)]" aria-hidden />
                 </Link>
               </div>
             </motion.div>

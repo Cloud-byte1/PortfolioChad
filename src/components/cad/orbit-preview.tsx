@@ -62,8 +62,8 @@ export function OrbitPreview({ className }: { className?: string }) {
             y1={Math.round(pts[a][1] * 10) / 10}
             x2={Math.round(pts[b][0] * 10) / 10}
             y2={Math.round(pts[b][1] * 10) / 10}
-            stroke="var(--ink)"
-            strokeOpacity={0.7}
+            stroke="var(--c-flame)"
+            strokeOpacity={0.9}
             strokeWidth={0.9}
             strokeLinecap="round"
           />

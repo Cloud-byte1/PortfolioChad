@@ -100,6 +100,13 @@ export function Hero() {
                   </motion.span>
                 </AnimatePresence>
               </div>
+              <p className="flex w-fit items-center gap-2 rounded-full border border-[color-mix(in_oklch,var(--c-turf)_45%,transparent)] bg-[color-mix(in_oklch,var(--c-turf)_10%,transparent)] px-2.5 py-0.5 text-[0.7rem] font-medium text-[var(--c-turf-ink)] xl:hidden">
+                <span className="relative flex size-2" aria-hidden>
+                  <span className="absolute inset-0 animate-ping rounded-full bg-[var(--c-turf)] opacity-60 motion-reduce:animate-none" />
+                  <span className="relative size-2 rounded-full bg-[var(--c-turf)]" />
+                </span>
+                Open to internships
+              </p>
               <div className="flex flex-wrap gap-2 pt-1">
                 <Button asChild size="sm" className="h-8 rounded-full px-3.5 text-xs">
                   <a href="#contact">
