@@ -876,116 +876,176 @@ function StirlingScene({ t, a }: SceneState) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Universal joint: click to change the shaft angle                     */
+/* V8: cross-plane crank driving two banks of four                      */
 /* ------------------------------------------------------------------ */
 
-const UJ = makeIso(120, 150, 0.82);
-const U_ANGLES = [30, 45, 15];
-const PLOT = { x0: 210, x1: 306, y0: 34, y1: 96 };
-const JZ = 70;
+const VI = makeIso(164, 128, 0.72);
+const VIEW: P3 = [1, 1, 1];
+const v3add = (...vs: P3[]): P3 => vs.reduce((s, v) => [s[0] + v[0], s[1] + v[1], s[2] + v[2]], [0, 0, 0]);
+const v3mul = (v: P3, k: number): P3 => [v[0] * k, v[1] * k, v[2] * k];
+const v3dot = (a: P3, b: P3) => a[0] * b[0] + a[1] * b[1] + a[2] * b[2];
 
-function ujointBeta({ a, n }: SceneState) {
-  const cur = U_ANGLES[n % U_ANGLES.length];
-  const prev = U_ANGLES[(n - 1 + U_ANGLES.length) % U_ANGLES.length];
-  const deg = a >= 0 && n > 0 ? lerp(prev, cur, smooth(a)) : cur;
-  return (deg * Math.PI) / 180;
-}
-
-function UShafts({
-  y,
-  detail,
-  beta,
-  th1,
-  th2,
+/** Box with arbitrary orthogonal edges e1, e2, e3 from corner o; draws the faces facing the viewer. */
+function Prism({
+  iso,
+  o,
+  e1,
+  e2,
+  e3,
+  glass,
+  tint,
+  top,
+  opacity,
 }: {
-  y: number;
-  detail: boolean;
-  beta: number;
-  th1: number;
-  th2: number;
+  iso: Iso;
+  o: P3;
+  e1: P3;
+  e2: P3;
+  e3: P3;
+  glass?: boolean;
+  /** Fill every face with the soft signal color. */
+  tint?: boolean;
+  top?: string;
+  opacity?: number;
 }) {
-  const dir: Pt = [Math.cos(beta), Math.sin(beta)];
-  const nrm: Pt = [-dir[1], dir[0]];
-  const outLen = 96;
-  const fork1 = 9 * Math.cos(th1);
-  const fork2 = 9 * Math.sin(th2);
-  const face = detail ? "face-t" : "face-r";
-  const shaft = [
-    [dir[0] * 12 + nrm[0] * 6, dir[1] * 12 + nrm[1] * 6],
-    [dir[0] * outLen + nrm[0] * 6, dir[1] * outLen + nrm[1] * 6],
-    [dir[0] * outLen - nrm[0] * 6, dir[1] * outLen - nrm[1] * 6],
-    [dir[0] * 12 - nrm[0] * 6, dir[1] * 12 - nrm[1] * 6],
-  ]
-    .map(([x, yy]) => `${r1(x)},${r1(yy)}`)
-    .join(" ");
-  const forkOut = (sign: number) =>
-    `M${r1(-dir[0] * 2 + sign * nrm[0] * fork2)},${r1(-dir[1] * 2 + sign * nrm[1] * fork2)} L${r1(dir[0] * 14 + sign * nrm[0] * fork2)},${r1(dir[1] * 14 + sign * nrm[1] * fork2)}`;
-
+  const c = (i: number, j: number, k: number) => v3add(o, v3mul(e1, i), v3mul(e2, j), v3mul(e3, k));
+  const faces: { pts: P3[]; n: P3 }[] = [
+    { pts: [c(1, 0, 0), c(1, 1, 0), c(1, 1, 1), c(1, 0, 1)], n: e1 },
+    { pts: [c(0, 0, 0), c(0, 1, 0), c(0, 1, 1), c(0, 0, 1)], n: v3mul(e1, -1) },
+    { pts: [c(0, 1, 0), c(1, 1, 0), c(1, 1, 1), c(0, 1, 1)], n: e2 },
+    { pts: [c(0, 0, 0), c(1, 0, 0), c(1, 0, 1), c(0, 0, 1)], n: v3mul(e2, -1) },
+    { pts: [c(0, 0, 1), c(1, 0, 1), c(1, 1, 1), c(0, 1, 1)], n: e3 },
+    { pts: [c(0, 0, 0), c(1, 0, 0), c(1, 1, 0), c(0, 1, 0)], n: v3mul(e3, -1) },
+  ];
   return (
-    <g transform={UJ.front(0, y, JZ)}>
-      <rect className={`edge ${face}`} x={-104} y={-6} width={92} height={12} rx={2} />
-      <polygon className={`edge ${face}`} points={shaft} />
-      {detail ? (
-        <>
-          <circle className="fill-sig" cx={-60} cy={r1(5 * Math.sin(th1))} r={2.4} opacity={Math.cos(th1) > 0 ? 1 : 0.25} />
-          <circle
-            className="fill-sig"
-            cx={r1(dir[0] * 56 + nrm[0] * 5 * Math.cos(th2))}
-            cy={r1(dir[1] * 56 + nrm[1] * 5 * Math.cos(th2))}
-            r={2.4}
-            opacity={Math.sin(th2) > 0 ? 1 : 0.25}
-          />
-          <path className="ln" d={`M-14,${r1(-fork1)} L2,${r1(-fork1)} M-14,${r1(fork1)} L2,${r1(fork1)}`} />
-          <path className="ln" d={`${forkOut(1)} ${forkOut(-1)}`} />
-          <circle className="edge face-t" cx={0} cy={0} r={5} />
-          <path className="ln faint" d="M0,0 L36,0" strokeDasharray="2 3" />
-          <path className="ln sig" d={arcPath(0, 0, 28, 0, beta)} />
-        </>
-      ) : null}
+    <g opacity={opacity}>
+      {faces
+        .filter((f) => v3dot(f.n, VIEW) > 1e-6)
+        .map((f, i) => {
+          const [nx, ny, nz] = f.n.map(Math.abs);
+          const shade = nz >= nx && nz >= ny ? top ?? "face-t" : ny >= nx ? "face-l" : "face-r";
+          const fill = glass ? "glass" : tint ? "face-sig-soft" : shade;
+          return <polygon key={i} className={`edge ${fill}`} points={iso.pts(f.pts)} />;
+        })}
     </g>
   );
 }
 
-function UJointScene(s: SceneState) {
-  const beta = ujointBeta(s);
-  const th1 = s.t * Math.PI * 2;
-  const th2 = Math.atan2(Math.sin(th1), Math.cos(th1) * Math.cos(beta));
-  const ratio = (th: number) => Math.cos(beta) / (1 - Math.sin(beta) ** 2 * Math.cos(th) ** 2);
-  const lo = Math.cos(beta);
-  const hi = 1 / Math.cos(beta);
-  const plotY = (r: number) => lerp(PLOT.y1, PLOT.y0, (r - 0.68) / (1.45 - 0.68));
-  const curve: Pt[] = Array.from({ length: 61 }, (_, i) => [
-    lerp(PLOT.x0, PLOT.x1, i / 60),
-    plotY(ratio((i / 60) * Math.PI * 2)),
-  ]);
-  const now: Pt = [lerp(PLOT.x0, PLOT.x1, s.t), plotY(ratio(th1))];
-  const bU = Math.cos(beta) * 64;
-  const bV = Math.sin(beta) * 64;
+const V8_R = 12;
+const V8_L = 40;
+const THROWS = [0, 90, 270, 180].map((d) => (d * Math.PI) / 180);
+// The crankshaft runs along y; the banks lean ±45° in the x–z plane.
+const THROW_Y = [-63, -21, 21, 63];
+const BANKS = [-Math.PI / 4, Math.PI / 4].map((alpha) => ({
+  alpha,
+  axis: [Math.sin(alpha), 0, Math.cos(alpha)] as P3,
+  across: [Math.cos(alpha), 0, -Math.sin(alpha)] as P3,
+}));
+// TDC angle of each cylinder (degrees, over a 720° cycle). Cylinders that
+// share a TDC angle fire on alternate revolutions.
+const FIRE_AT = (() => {
+  const seen = new Set<number>();
+  return BANKS.map((bank) =>
+    THROWS.map((phi) => {
+      let deg = ((((bank.alpha - phi) * 180) / Math.PI) % 360 + 360) % 360;
+      if (seen.has(Math.round(deg))) deg += 360;
+      seen.add(Math.round(deg % 360));
+      return deg;
+    })
+  );
+})();
+
+function V8Scene({ t, a }: SceneState) {
+  const theta = t * Math.PI * 4;
+  const thetaDeg = (theta * 180) / Math.PI;
+  const revving = a >= 0 ? Math.sin(Math.PI * a) : 0;
+  const pin = (i: number): P3 => [V8_R * Math.sin(theta + THROWS[i]), THROW_Y[i], V8_R * Math.cos(theta + THROWS[i])];
+
+  const bankParts = (b: number) => {
+    const bank = BANKS[b];
+    return THROW_Y.map((y, i) => {
+      const beta = theta + THROWS[i] - bank.alpha;
+      const dist = V8_R * Math.cos(beta) + Math.sqrt(V8_L ** 2 - (V8_R * Math.sin(beta)) ** 2);
+      const since = ((thetaDeg - FIRE_AT[b][i]) % 720 + 720) % 720;
+      const flash = clamp01(1 - since / 80);
+      const wrist = v3add([0, y, 0], v3mul(bank.axis, dist));
+      return { y, dist, flash, wrist, crank: pin(i) };
+    });
+  };
+
+  const drawBank = (b: number) => {
+    const bank = BANKS[b];
+    const parts = bankParts(b);
+    return (
+      <g>
+        {parts.map((part, i) => {
+          const [p0, p1] = [VI.p(...part.crank), VI.p(...part.wrist)];
+          return (
+            <g key={i}>
+              <line className="ln" x1={r1(p0[0])} y1={r1(p0[1])} x2={r1(p1[0])} y2={r1(p1[1])} />
+              <Prism
+                iso={VI}
+                o={v3add([0, part.y - 14, 0], v3mul(bank.axis, part.dist), v3mul(bank.across, -14))}
+                e1={[0, 28, 0]}
+                e2={v3mul(bank.across, 28)}
+                e3={v3mul(bank.axis, 12)}
+                tint
+              />
+              <Prism
+                iso={VI}
+                o={v3add([0, part.y - 14, 0], v3mul(bank.axis, 66), v3mul(bank.across, -14))}
+                e1={[0, 28, 0]}
+                e2={v3mul(bank.across, 28)}
+                e3={v3mul(bank.axis, 10)}
+                top="face-sig"
+                opacity={r1(Math.max(part.flash, revving * 0.15) * 100) / 100}
+              />
+            </g>
+          );
+        })}
+        <Prism
+          iso={VI}
+          o={v3add([0, -84, 0], v3mul(bank.axis, 18), v3mul(bank.across, -20))}
+          e1={[0, 168, 0]}
+          e2={v3mul(bank.across, 40)}
+          e3={v3mul(bank.axis, 60)}
+          glass
+        />
+      </g>
+    );
+  };
+
+  const pulleyC: P3 = [0, 96, 0];
+  const rim = (r: number) =>
+    VI.pts(
+      Array.from({ length: 32 }, (_, k): P3 => {
+        const ang = (k / 32) * Math.PI * 2;
+        return [r * Math.sin(ang), pulleyC[1], r * Math.cos(ang)];
+      })
+    );
 
   return (
     <>
-      <IsoBox iso={UJ} x={-120} y={-30} z={0} w={220} d={60} h={8} />
-      {/* bearing blocks */}
-      <IsoBox iso={UJ} x={-80} y={-12} z={8} w={16} d={24} h={JZ - 8 - 6} />
-      <IsoBox iso={UJ} x={bU - 8} y={-12} z={8} w={16} d={24} h={Math.max(4, JZ - bV - 8 - 6)} />
-      <UShafts y={-3} detail={false} beta={beta} th1={th1} th2={th2} />
-      <UShafts y={3} detail beta={beta} th1={th1} th2={th2} />
-      <Label at={UJ.p(36, 6, JZ)} anchor="start" dy={-4}>
-        {Math.round((beta * 180) / Math.PI)}°
-      </Label>
+      {/* crankshaft and its throws, seen through the crankcase */}
+      <polyline className="ln" points={VI.pts([[0, -90, 0], [0, 96, 0]])} />
+      {THROW_Y.map((y, i) => {
+        const [c0, c1] = [VI.p(0, y, 0), VI.p(...pin(i))];
+        return <line key={y} className="ln sig" x1={r1(c0[0])} y1={r1(c0[1])} x2={r1(c1[0])} y2={r1(c1[1])} />;
+      })}
+      <Prism iso={VI} o={[-30, -80, -60]} e1={[60, 0, 0]} e2={[0, 160, 0]} e3={[0, 0, 16]} />
+      <Prism iso={VI} o={[-34, -84, -44]} e1={[68, 0, 0]} e2={[0, 168, 0]} e3={[0, 0, 58]} glass />
 
-      {/* speed ratio plot */}
-      <text x={PLOT.x0} y={PLOT.y0 - 8}>output ÷ input speed</text>
-      <line className="ln faint" x1={PLOT.x0} y1={PLOT.y1} x2={PLOT.x1} y2={PLOT.y1} />
-      <line className="ln faint" x1={PLOT.x0} y1={PLOT.y0} x2={PLOT.x0} y2={PLOT.y1} />
-      <line className="ln faint" x1={PLOT.x0} y1={r1(plotY(1))} x2={PLOT.x1} y2={r1(plotY(1))} strokeDasharray="2 3" />
-      <text x={PLOT.x0 - 4} y={r1(plotY(1) + 2.5)} textAnchor="end" fontSize="6.5">1.0</text>
-      <path className="ln faint" d={toD(curve)} />
-      <path className="ln sig" d={toD([...curve.slice(0, Math.floor(s.t * 60) + 1), now])} />
-      <circle className="fill-sig" cx={r1(now[0])} cy={r1(now[1])} r={2.6} />
-      <text x={PLOT.x1} y={PLOT.y1 + 11} textAnchor="end" fontSize="6.5">
-        {lo.toFixed(2)}× to {hi.toFixed(2)}×
-      </text>
+      {drawBank(0)}
+      {drawBank(1)}
+
+      {/* crank pulley turning with the shaft */}
+      <polygon className="edge face-r" points={rim(24)} />
+      {[0, 1, 2, 3].map((k) => {
+        const ang = theta + (k * Math.PI) / 2;
+        const [c0, c1] = [VI.p(...pulleyC), VI.p(20 * Math.sin(ang), pulleyC[1], 20 * Math.cos(ang))];
+        return <line key={k} className="ln faint" x1={r1(c0[0])} y1={r1(c0[1])} x2={r1(c1[0])} y2={r1(c1[1])} />;
+      })}
+      <Label at={VI.p(0, 96, -24)} anchor="end" dy={14}>crank pulley</Label>
     </>
   );
 }
@@ -1293,13 +1353,21 @@ export const scenes: Record<SceneKey, SceneSpec> = {
             ? "Running fast, displacer 90° ahead of the power piston"
             : "Cooling back down",
   },
-  ujoint: {
-    render: (s) => <UJointScene {...s} />,
-    duration: 4200,
-    rest: 0.6,
-    action: 900,
-    verb: "Change the shaft angle",
-    status: ({ n }) => `${U_ANGLES[n % U_ANGLES.length]}° shaft angle. Click to change it.`,
+  v8: {
+    render: (s) => <V8Scene {...s} />,
+    duration: 2600,
+    rest: 0.1,
+    action: 4400,
+    verb: "Rev the engine",
+    rate: (a) => (a < 0 ? 1 : 1 + 3 * Math.sin(Math.PI * a)),
+    status: ({ a }) =>
+      a < 0
+        ? "Idling. Click to rev it."
+        : a < 0.35
+          ? "Revving up"
+          : a < 0.7
+            ? "Eight cylinders firing on a cross-plane crank"
+            : "Settling back to idle",
   },
   swipe: {
     render: (s) => <SwipeScene {...s} />,

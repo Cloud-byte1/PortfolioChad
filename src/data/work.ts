@@ -11,7 +11,7 @@ export type SceneKey =
   | "app"
   | "nas"
   | "stirling"
-  | "ujoint"
+  | "v8"
   | "swipe"
   | "pipeline";
 
@@ -34,8 +34,6 @@ export type WorkItem = {
   summary: string;
   tools: string[];
   figures: Figure[];
-  /** Show on the home page. */
-  featured?: boolean;
   /** Show the 3D viewer on this project's page. */
   hasModel?: boolean;
 };
@@ -51,7 +49,7 @@ export const disciplines: { name: Discipline; blurb: string }[] = [
   },
   {
     name: "Software",
-    blurb: "Apps and data tools.",
+    blurb: "Apps and the data behind them.",
   },
 ];
 
@@ -63,7 +61,6 @@ export const work: WorkItem[] = [
     summary:
       "A smart golf training mat (built under the TurfTrack name) that reads every strike with pressure pads, an IMU, and 60 GHz radar, then scores it on an iPhone app. I worked on the sensors, the board, the printed housings, and the app.",
     tools: ["ESP-IDF / C", "KiCad", "Fusion 360", "CadQuery", "SwiftUI", "BLE", "Supabase"],
-    featured: true,
     figures: [
       {
         scene: "strike",
@@ -122,7 +119,6 @@ export const work: WorkItem[] = [
     summary:
       "A mini-ITX file server with 8 TB of storage and a program that sorts my files for me.",
     tools: ["SolidWorks", "Cursor", "Systems"],
-    featured: true,
     figures: [
       {
         scene: "nas",
@@ -142,9 +138,8 @@ export const work: WorkItem[] = [
     title: "Stirling engine",
     discipline: "Mechanisms",
     summary:
-      "A full engine assembly modeled in SolidWorks, alongside a V8 engine study.",
+      "A full Stirling engine assembly modeled in SolidWorks.",
     tools: ["SolidWorks"],
-    featured: true,
     hasModel: true,
     figures: [
       {
@@ -155,28 +150,25 @@ export const work: WorkItem[] = [
         did: [
           "Modeled each part and mated the assembly so the flywheel drives both pistons.",
           "Set the displacer and power piston about 90° out of phase, which is what moves heat between the hot and cold ends.",
-          "Modeled a V8 engine as a second assembly study.",
         ],
       },
     ],
   },
   {
-    id: "universal-joint",
-    title: "Universal joint",
+    id: "v8-engine",
+    title: "V8 engine",
     discipline: "Mechanisms",
-    summary: "Inventor assemblies of a universal shaft, crank, and slide mechanism.",
-    tools: ["Autodesk Inventor"],
-    featured: true,
+    summary: "A V8 engine assembly modeled in SolidWorks.",
+    tools: ["SolidWorks"],
     figures: [
       {
-        scene: "ujoint",
-        title: "Shaft angle and speed",
+        scene: "v8",
+        title: "Crank and pistons",
         caption:
-          "A U-joint at an angle makes the output speed up and slow down twice per turn. The plot traces that ratio.",
+          "Two banks of four at 90° on a cross-plane crankshaft. Each cylinder glows as it fires.",
         did: [
-          "Modeled the yokes, pins, connecting rod, crank handle, and base as separate parts.",
-          "Assembled the universal joint and set the shaft angle with constraints.",
-          "Used drive constraints to animate the crank and slide through their range.",
+          "Modeled the engine’s parts in SolidWorks and mated them into a full V8 assembly.",
+          "Set up the mates so the crankshaft drives all eight pistons through their strokes.",
         ],
       },
     ],
@@ -185,8 +177,9 @@ export const work: WorkItem[] = [
     id: "college-app",
     title: "College discovery app",
     discipline: "Software",
-    summary: "A full-stack iOS app for finding universities by swiping.",
-    tools: ["React Native", "Expo"],
+    summary:
+      "A full-stack iOS app for discovering universities by swiping, plus an LLM pipeline that cleaned 300,000+ raw records into 1,000+ validated profiles.",
+    tools: ["React Native", "Expo", "Python", "ChatGPT API"],
     figures: [
       {
         scene: "swipe",
@@ -197,28 +190,17 @@ export const work: WorkItem[] = [
           "Designed the swipe interface for browsing schools one card at a time.",
         ],
       },
-    ],
-  },
-  {
-    id: "data-pipeline",
-    title: "LLM data cleanup",
-    discipline: "Software",
-    summary:
-      "An automated pipeline that cleaned 300,000+ raw records into 1,000+ validated profiles.",
-    tools: ["Python", "ChatGPT API"],
-    figures: [
       {
         scene: "pipeline",
-        title: "Clean and validate",
+        title: "LLM data cleanup",
         caption:
           "Messy records ride in, get cleaned and checked, and only validated profiles come out.",
         did: [
-          "Helped architect the pipeline around the ChatGPT API to clean and normalize messy records.",
-          "Filtered and validated the output into a structured set of profiles ready for analysis.",
+          "Helped architect the pipeline around the ChatGPT API to clean and normalize 300,000+ raw records.",
+          "Filtered and validated the output into 1,000+ structured profiles ready for analysis.",
         ],
       },
     ],
   },
 ];
 
-export const featuredWork = work.filter((item) => item.featured);

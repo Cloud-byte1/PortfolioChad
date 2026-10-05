@@ -256,7 +256,8 @@
 }
 .scene .glass {
   fill: var(--face-t);
-  fill-opacity: 0.28;
+  fill-opacity: 0.12;
+  stroke-opacity: 0.55;
 }
 .scene .screen {
   fill: var(--screen);

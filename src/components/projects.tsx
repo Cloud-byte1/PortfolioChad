@@ -1,6 +1,5 @@
 import Link from "next/link";
-import { ProjectCard } from "@/components/work/project-card";
-import { featuredWork, work } from "@/data/work";
+import { ProjectSwitcher } from "@/components/work/project-switcher";
 
 export function Projects() {
   return (
@@ -9,21 +8,18 @@ export function Projects() {
         <div className="flex flex-col gap-2">
           <h2 className="section-rule text-base font-semibold text-ink">Projects</h2>
           <p className="text-sm text-muted-foreground">
-            A few highlights. Open one to see how it works and what I did on it.
+            Pick a project to preview it. Click the drawing to make it move, or open the project
+            to see what I did.
           </p>
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-2">
-          {featuredWork.map((item) => (
-            <ProjectCard key={item.id} item={item} />
-          ))}
-        </div>
+        <ProjectSwitcher />
 
         <Link
           href="/cad"
-          className="w-fit text-sm font-medium text-foreground underline underline-offset-4 decoration-border transition-colors hover:decoration-foreground"
+          className="w-fit text-sm font-medium text-foreground underline decoration-border underline-offset-4 transition-colors hover:decoration-foreground"
         >
-          See all {work.length} projects in the CAD Lab
+          Go to the CAD Lab
         </Link>
       </div>
     </section>
