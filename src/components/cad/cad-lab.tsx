@@ -83,13 +83,13 @@ export function CadLab() {
   }
 
   return (
-    <section id="cad-lab" className="scroll-mt-14 px-4 py-6 sm:px-5">
+    <section id="cad-lab" className="scroll-mt-14 px-4 pt-6 pb-8 sm:px-5">
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          <h2 className="section-rule text-base font-semibold text-ink">CAD Lab</h2>
+          <h2 className="text-lg font-bold tracking-tight text-ink">Orbit a model</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Export from SolidWorks as GLB or STL, drop it in, and inspect it like
-            a CAD viewport — drag to orbit, scroll to zoom, right-drag to pan.
+            Spin a model in 3D, or drop in your own STL, GLB, or GLTF file. Drag to
+            orbit, scroll to zoom, right-drag to pan.
           </p>
         </div>
 
@@ -171,7 +171,7 @@ export function CadLab() {
           ) : null}
         </div>
 
-        <div className="relative h-[320px] overflow-hidden rounded-lg border border-border bg-[#f4f4f5] sm:h-[380px]">
+        <div className="relative h-[320px] overflow-hidden rounded-lg border border-border bg-[var(--viewport)] sm:h-[380px]">
           {active ? (
             <CadCanvas
               src={active.src}
@@ -201,18 +201,16 @@ export function CadLab() {
 
         {active?.sourceDownload ? (
           <p className="text-xs text-muted-foreground leading-relaxed">
-            Original SolidWorks assembly archived here:{" "}
+            Browsers can’t open SolidWorks files, so the viewer shows a simplified
+            version.{" "}
             <a
               className="font-medium text-foreground underline underline-offset-2"
               href={active.sourceDownload}
               download
             >
-              Stirling_Engine.SLDASM
-            </a>
-            . Browsers can’t render `.SLDASM` — to show your exact geometry, open it
-            in SolidWorks → <strong>File → Save As → STL</strong> (export parts
-            too if needed), then drop that STL here or replace{" "}
-            <code className="text-[0.65rem]">public/models/stirling-engine.stl</code>.
+              Download the original assembly
+            </a>{" "}
+            to open it in SolidWorks.
           </p>
         ) : null}
 

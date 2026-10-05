@@ -9,6 +9,7 @@ import { site } from "@/data/portfolio";
 const links = [
   { href: "/#about", label: "About" },
   { href: "/#projects", label: "Projects" },
+  { href: "/cad", label: "CAD Lab" },
   { href: "/#skills", label: "Programs" },
 ] as const;
 

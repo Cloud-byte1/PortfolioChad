@@ -9,7 +9,7 @@ export function Projects() {
         <div className="flex flex-col gap-2">
           <h2 className="section-rule text-base font-semibold text-ink">Projects</h2>
           <p className="text-sm text-muted-foreground">
-            Assemblies you can orbit and software that keeps engineering context clear.
+            A few highlights. Every project, with what I did on it, lives in the CAD Lab.
           </p>
         </div>
 

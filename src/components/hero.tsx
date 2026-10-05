@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatePresence, motion } from "motion/react";
-import { ArrowUpRight, Box, Mail, MessageSquare } from "lucide-react";
+import { ArrowUpRight, Mail, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { site } from "@/data/portfolio";
+import { work } from "@/data/work";
+import { SceneView } from "@/components/work/scene-view";
 import { cn } from "@/lib/utils";
 
 type AvatarMode = "photo" | "character";
@@ -132,35 +134,26 @@ export function Hero() {
         >
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="font-mono text-[0.58rem] uppercase tracking-[0.16em] text-muted-foreground">
-                Featured workspace
+              <h2 className="text-base font-semibold text-ink">CAD Lab</h2>
+              <p className="mt-0.5 text-xs text-muted-foreground">
+                {work.length} projects, each one animated
               </p>
-              <h2 className="mt-1.5 text-base font-semibold text-ink">CAD Lab</h2>
             </div>
             <span className="grid size-8 shrink-0 place-items-center rounded-full border border-border bg-background transition-transform duration-300 group-hover:rotate-6 group-hover:scale-105">
               <ArrowUpRight className="size-3.5" />
             </span>
           </div>
 
-          <div className="relative my-4 min-h-24 flex-1 overflow-hidden rounded-lg border border-border bg-muted/40 dot-grid">
-            <div className="absolute inset-x-3 top-3 flex items-center justify-between font-mono text-[0.5rem] uppercase tracking-[0.12em] text-muted-foreground">
-              <span>SolidWorks</span>
-              <span>3D viewport</span>
-            </div>
-            <div className="absolute inset-x-0 bottom-0 top-7 grid place-items-center">
-              <div className="relative h-12 w-20 transition-transform duration-500 group-hover:scale-105 group-hover:-rotate-2">
-                <div className="absolute left-1/2 top-1/2 h-8 w-12 -translate-x-1/2 -translate-y-1/2 rotate-[18deg] border border-foreground/55 bg-background/75 shadow-sm" />
-                <div className="absolute left-[34%] top-[30%] size-5 rounded-full border border-foreground/60 bg-muted shadow-[inset_0_0_0_4px_var(--background)]" />
-                <span className="absolute bottom-0 right-0 grid size-6 place-items-center rounded-md border border-border bg-background shadow-sm">
-                  <Box className="size-3 text-muted-foreground" />
-                </span>
-              </div>
-            </div>
-          </div>
+          <SceneView
+            scene="stirling"
+            label="Animated Stirling engine: the flywheel turns and both pistons move 90 degrees apart."
+            controls={false}
+            className="my-3 flex-1"
+          />
 
           <div className="flex items-center justify-between gap-3 text-[0.68rem]">
-            <span className="text-muted-foreground">Orbit · zoom · inspect</span>
-            <span className="font-medium text-foreground">Enter lab</span>
+            <span className="text-muted-foreground">Mechanisms, boards, and apps</span>
+            <span className="font-medium text-foreground">Enter the lab</span>
           </div>
         </Link>
       </div>

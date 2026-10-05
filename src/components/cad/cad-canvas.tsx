@@ -11,6 +11,7 @@ import {
 } from "@react-three/drei";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader.js";
 import type { CadModelFormat } from "@/data/models";
+import { useThemeMode } from "@/lib/motion-hooks";
 
 type CadCanvasProps = {
   src: string;
@@ -18,7 +19,12 @@ type CadCanvasProps = {
   autoRotate: boolean;
 };
 
-function StlPart({ url }: { url: string }) {
+const palette = {
+  light: { bg: "#f1f2f4", gridMajor: "#a9abb2", gridMinor: "#dcdde2", part: "#7a8b94", shadow: 0.28 },
+  dark: { bg: "#17181b", gridMajor: "#4a4c52", gridMinor: "#2a2b2f", part: "#9aa8b0", shadow: 0.55 },
+} as const;
+
+function StlPart({ url, color }: { url: string; color: string }) {
   const geometry = useLoader(STLLoader, url);
   const colored = useMemo(() => {
     const g = geometry.clone();
@@ -29,7 +35,7 @@ function StlPart({ url }: { url: string }) {
 
   return (
     <mesh geometry={colored} castShadow receiveShadow>
-      <meshStandardMaterial color="#7a8b94" metalness={0.82} roughness={0.32} />
+      <meshStandardMaterial color={color} metalness={0.82} roughness={0.32} />
     </mesh>
   );
 }
@@ -40,10 +46,18 @@ function GltfPart({ url }: { url: string }) {
   return <primitive object={cloned} />;
 }
 
-function Model({ src, format }: { src: string; format: CadModelFormat }) {
+function Model({
+  src,
+  format,
+  color,
+}: {
+  src: string;
+  format: CadModelFormat;
+  color: string;
+}) {
   return (
     <Center>
-      {format === "stl" ? <StlPart url={src} /> : <GltfPart url={src} />}
+      {format === "stl" ? <StlPart url={src} color={color} /> : <GltfPart url={src} />}
     </Center>
   );
 }
@@ -61,12 +75,13 @@ function LoaderFallback() {
   return (
     <mesh>
       <boxGeometry args={[0.6, 0.6, 0.6]} />
-      <meshStandardMaterial color="#52525b" wireframe />
+      <meshStandardMaterial color="#8a8d94" wireframe />
     </mesh>
   );
 }
 
 export function CadCanvas({ src, format, autoRotate }: CadCanvasProps) {
+  const colors = palette[useThemeMode()];
   return (
     <Canvas
       shadows
@@ -75,7 +90,7 @@ export function CadCanvas({ src, format, autoRotate }: CadCanvasProps) {
       gl={{ antialias: true, alpha: true }}
       className="h-full w-full touch-none"
     >
-      <color attach="background" args={["#f4f4f5"]} />
+      <color attach="background" args={[colors.bg]} />
       <ambientLight intensity={0.6} />
       <directionalLight
         position={[5, 8, 4]}
@@ -85,11 +100,11 @@ export function CadCanvas({ src, format, autoRotate }: CadCanvasProps) {
       />
       <directionalLight position={[-4, 2, -3]} intensity={0.3} />
       <Suspense fallback={<LoaderFallback />}>
-        <Model key={src} src={src} format={format} />
+        <Model key={src} src={src} format={format} color={colors.part} />
         <Environment preset="city" environmentIntensity={0.28} />
         <ContactShadows
           position={[0, -1.15, 0]}
-          opacity={0.28}
+          opacity={colors.shadow}
           scale={12}
           blur={2.4}
           far={4}
@@ -107,7 +122,8 @@ export function CadCanvas({ src, format, autoRotate }: CadCanvasProps) {
         target={[0, 0, 0]}
       />
       <gridHelper
-        args={[10, 20, "#b0b0b4", "#e4e4e7"]}
+        key={colors.bg}
+        args={[10, 20, colors.gridMajor, colors.gridMinor]}
         position={[0, -1.16, 0]}
       />
     </Canvas>

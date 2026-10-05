@@ -1,56 +1,54 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { AnimatePresence, LayoutGroup, motion } from "motion/react";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   CircleArrowUpRight02Icon,
-  DashboardSquare01Icon,
+  CpuIcon,
   DatabaseIcon,
-  Folder02Icon,
-  Tick01Icon,
+  GolfBallIcon,
+  Settings02Icon,
 } from "@hugeicons/core-free-icons";
-import { projects } from "@/data/portfolio";
+import { featuredWork } from "@/data/work";
+import { SceneView } from "@/components/work/scene-view";
 import { cn } from "@/lib/utils";
 
-const projectIcons = [DashboardSquare01Icon, DatabaseIcon, Folder02Icon];
+const projectIcons = {
+  "fairlie-mat": GolfBallIcon,
+  "fairlie-board": CpuIcon,
+  "stirling-engine": Settings02Icon,
+  nas: DatabaseIcon,
+} as const;
 
 export default function BentoCard() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const activeProject = projects[activeIndex];
+  const active = featuredWork[activeIndex];
 
   return (
-    <div className="group relative overflow-hidden rounded-xl border border-border bg-card shadow-[0_12px_35px_oklch(0_0_0/0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_18px_45px_oklch(0_0_0/0.1)]">
-      <div className="border-b border-border p-4 sm:p-5">
-        <p className="font-mono text-[0.62rem] uppercase tracking-[0.16em] text-muted-foreground">
-          Selected work
-        </p>
-        <div className="mt-2 flex items-end justify-between gap-4">
-          <p className="max-w-md text-sm font-medium leading-relaxed text-foreground">
-            Hardware, systems, and mechanical design projects built from first principles.
-          </p>
-          <HugeiconsIcon
-            icon={CircleArrowUpRight02Icon}
-            size={18}
-            className="shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
-          />
-        </div>
-      </div>
-
-      <div className="grid min-h-[280px] sm:grid-cols-[10.5rem_1fr]">
+    <div className="overflow-hidden rounded-xl border border-border bg-card shadow-[0_12px_35px_oklch(0_0_0/0.06)]">
+      <div className="grid sm:grid-cols-[10.5rem_1fr]">
         <LayoutGroup>
-          <div className="flex gap-1 overflow-x-auto border-b border-border bg-muted/15 p-2 sm:flex-col sm:border-r sm:border-b-0 sm:pt-4">
-            {projects.map((project, index) => {
+          <div
+            role="tablist"
+            aria-label="Featured projects"
+            className="flex gap-1 overflow-x-auto border-b border-border bg-muted/15 p-2 sm:flex-col sm:border-r sm:border-b-0 sm:pt-4"
+          >
+            {featuredWork.map((project, index) => {
               const isActive = index === activeIndex;
-              const Icon = projectIcons[index] ?? Folder02Icon;
+              const Icon =
+                projectIcons[project.id as keyof typeof projectIcons] ?? CpuIcon;
 
               return (
                 <button
-                  key={project.title}
+                  key={project.id}
                   type="button"
+                  role="tab"
+                  aria-selected={isActive}
                   onClick={() => setActiveIndex(index)}
                   className={cn(
-                    "relative flex shrink-0 items-center gap-2 rounded-md px-3 py-2 text-left text-[0.68rem] font-medium transition-colors",
+                    "relative flex shrink-0 items-center gap-2 rounded-md px-3 py-2 text-left text-[0.7rem] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",
                     isActive
                       ? "text-foreground"
                       : "text-muted-foreground hover:text-foreground"
@@ -64,60 +62,71 @@ export default function BentoCard() {
                     />
                   )}
                   <HugeiconsIcon icon={Icon} size={14} className="relative z-10 shrink-0" />
-                  <span className="relative z-10 max-w-28 truncate">{project.title}</span>
+                  <span className="relative z-10 max-w-32 truncate">{project.title}</span>
                 </button>
               );
             })}
           </div>
         </LayoutGroup>
 
-        <div className="relative flex min-h-[230px] flex-col overflow-hidden p-4 sm:p-5">
+        <div role="tabpanel" className="relative flex min-w-0 flex-col p-4 sm:p-5">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
-              key={activeProject.title}
-              initial={{ opacity: 0, y: 8, filter: "blur(3px)" }}
-              animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, y: -8, filter: "blur(3px)" }}
-              transition={{ duration: 0.22 }}
-              className="flex flex-1 flex-col"
+              key={active.id}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.2 }}
+              className="flex flex-col gap-4"
             >
-              <div className="flex items-start justify-between gap-4 border-b border-border pb-4">
-                <div>
-                  <p className="font-mono text-[0.58rem] uppercase tracking-[0.14em] text-muted-foreground">
-                    Project {String(activeIndex + 1).padStart(2, "0")}
-                  </p>
-                  <h3 className="mt-1.5 text-base font-semibold tracking-tight text-ink">
-                    {activeProject.title}
+              <SceneView scene={active.scene} label={active.caption} />
+
+              <div className="flex items-start justify-between gap-4">
+                <div className="min-w-0">
+                  <h3 className="text-base font-semibold tracking-tight text-ink">
+                    {active.title}
                   </h3>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                    {active.summary}
+                  </p>
                 </div>
-                <a
-                  href={activeProject.href}
-                  aria-label={`Open ${activeProject.title}`}
+                <Link
+                  href={`/cad#${active.id}`}
+                  aria-label={`Read more about ${active.title} in the CAD Lab`}
                   className="grid size-8 shrink-0 place-items-center rounded-md border border-border transition-colors hover:bg-muted"
                 >
                   <HugeiconsIcon icon={CircleArrowUpRight02Icon} size={15} />
-                </a>
+                </Link>
               </div>
 
-              <p className="py-4 text-sm leading-relaxed text-muted-foreground">
-                {activeProject.description}
-              </p>
-
-              <div className="mt-auto grid gap-1.5 sm:grid-cols-2">
-                {activeProject.stack.map((item, index) => (
-                  <div
-                    key={item}
-                    className="flex h-9 items-center gap-2.5 rounded-md border border-border bg-background px-3 transition-colors hover:bg-muted"
+              <ul className="flex flex-col gap-1.5 text-[0.8rem] leading-relaxed text-muted-foreground">
+                {active.did.slice(0, 2).map((line) => (
+                  <li
+                    key={line}
+                    className="relative pl-3.5 before:absolute before:top-[0.6em] before:left-0 before:size-1 before:rounded-full before:bg-foreground/50"
                   >
-                    <span className="font-mono text-[0.55rem] tabular-nums text-muted-foreground">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <HugeiconsIcon icon={Tick01Icon} size={12} className="text-muted-foreground" />
-                    <span className="truncate text-[0.7rem] font-medium text-foreground">
-                      {item}
-                    </span>
-                  </div>
+                    {line}
+                  </li>
                 ))}
+              </ul>
+
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <ul className="flex flex-wrap gap-1.5" aria-label="Tools">
+                  {active.tools.map((tool) => (
+                    <li
+                      key={tool}
+                      className="rounded-full border border-border px-2.5 py-0.5 text-[0.68rem] font-medium text-foreground"
+                    >
+                      {tool}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href={`/cad#${active.id}`}
+                  className="text-xs font-medium text-foreground underline-offset-2 hover:underline"
+                >
+                  Full write-up
+                </Link>
               </div>
             </motion.div>
           </AnimatePresence>

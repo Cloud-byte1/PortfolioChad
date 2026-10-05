@@ -21,28 +21,10 @@ export const cadModels: CadModel[] = [
     id: "stirling-engine",
     title: "Stirling Engine",
     description:
-      "Your SolidWorks assembly on the site — orbit the viewport model. Exact SW geometry needs an STL/GLB export (assembly file is linked below).",
+      "A simplified 3D stand-in for my SolidWorks Stirling engine. The original assembly file is linked below.",
     src: "/models/stirling-engine.stl",
     format: "stl",
-    sourceNote: "Stirling Engine · from Stirling Engine.SLDASM",
+    sourceNote: "Stirling engine (simplified)",
     sourceDownload: "/models/source/Stirling_Engine.SLDASM",
-  },
-  {
-    id: "gear-assembly",
-    title: "Gear & shaft assembly",
-    description:
-      "Demo mechanical assembly — orbit, pan, and zoom like a SolidWorks viewport.",
-    src: "/models/gear-assembly.stl",
-    format: "stl",
-    sourceNote: "Sample STL",
-  },
-  {
-    id: "mounting-bracket",
-    title: "Mounting bracket",
-    description:
-      "L-bracket with rib — drop your own .stl or .glb to replace this part.",
-    src: "/models/mounting-bracket.stl",
-    format: "stl",
-    sourceNote: "Sample STL",
   },
 ];
