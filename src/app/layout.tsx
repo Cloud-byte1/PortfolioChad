@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 const body = Manrope({
@@ -10,7 +11,7 @@ const body = Manrope({
 export const metadata: Metadata = {
   title: "Chad Carmichael — Mechanical Engineering Portfolio",
   description:
-    "Portfolio of Chad Carmichael — design and mechanical engineering with an interactive SolidWorks CAD viewer.",
+    "Portfolio of Chad Carmichael: mechanical engineering projects, interactive figures, and a 3D CAD viewer.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       </head>
       <body className="font-body min-h-full flex flex-col text-foreground">
         {children}
+        <SpeedInsights />
       </body>
     </html>
   );
