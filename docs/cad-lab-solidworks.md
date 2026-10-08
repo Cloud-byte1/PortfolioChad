@@ -64,3 +64,11 @@ Regenerate Stirling viewport mesh: `node scripts/generate-stirling.mjs`
 
 - Repo root `README.md` — how to run the app
 - `public/models/README.md` — export notes next to the assets
+
+
+## Current pipeline (replaces the notes above)
+
+1. In SolidWorks, open the assembly → **File → Save As → STL**. Under **Options**, turn **off** "Save all components of an assembly in a single file" so each part gets its own STL in shared assembly coordinates.
+2. Build a GLB: `node scripts/build-cad-models.mjs <v8|stirling> "<export folder>"`. Repeated parts are stored once, and materials come from the part names (see `MODELS` in the script).
+3. Compress: `sh scripts/optimize-cad-models.sh` (simplify + meshopt).
+4. Register the model in `src/data/models.ts`. Add `ghost` material names to get a "See inside" toggle.

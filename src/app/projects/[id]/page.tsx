@@ -117,6 +117,38 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[id]"
           );
         })}
 
+        {item.lessons ? (
+          <Reveal className="border-b border-border px-4 py-7 sm:px-5">
+            <section aria-labelledby="lessons" className="flex flex-col gap-5">
+              <h2 id="lessons" className="text-lg font-bold tracking-tight text-ink">
+                Challenges and what I learned
+              </h2>
+              <div className="grid gap-6 sm:grid-cols-2">
+                {(
+                  [
+                    ["Challenges", item.lessons.challenges],
+                    ["What I learned", item.lessons.learned],
+                  ] as const
+                ).map(([heading, lines]) => (
+                  <div key={heading} className="flex flex-col gap-2.5">
+                    <h3 className="text-sm font-semibold text-[var(--accent-ink)]">{heading}</h3>
+                    <ul className="flex flex-col gap-2 text-sm leading-relaxed text-muted-foreground">
+                      {lines.map((line) => (
+                        <li
+                          key={line}
+                          className="relative pl-3.5 before:absolute before:top-[0.6em] before:left-0 before:size-1.5 before:rounded-full before:bg-[var(--accent)]"
+                        >
+                          {line}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
+            </section>
+          </Reveal>
+        ) : null}
+
         <nav aria-label="More projects" className="grid grid-cols-2 border-t border-border text-xs">
           <Link
             href={projectHref(previous.id)}
