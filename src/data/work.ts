@@ -38,6 +38,8 @@ export type WorkItem = {
   accent: Accent;
   tools: string[];
   figures: Figure[];
+  /** Reflection shown on the project page after the figures. */
+  lessons?: { challenges: string[]; learned: string[] };
 };
 
 export const disciplines: { name: Discipline; blurb: string }[] = [
@@ -146,6 +148,18 @@ export const work: WorkItem[] = [
       "A multi-component Stirling engine modeled and assembled in SolidWorks from engineering drawings, with full technical drawings and a BOM.",
     accent: "flame",
     tools: ["SolidWorks"],
+    lessons: {
+      challenges: [
+        "Turning the engineering drawings into accurate parts, matching every dimension, tolerance, and thread on the print.",
+        "Mating 46 parts so the crank, displacer, and power piston actually move together, with the displacer running 90° ahead of the power piston.",
+        "Modeling the threaded screws, dowel pins, and O-rings, and getting the fits between parts right.",
+      ],
+      learned: [
+        "How to read a drawing package closely and build exactly to it.",
+        "How mates drive motion in an assembly, and how a Stirling engine’s 90° phase moves heat between the hot and cold ends.",
+        "How to document an assembly with exploded views, drawings, and a BOM so someone else could build it.",
+      ],
+    },
     figures: [
       {
         scene: "stirling",
@@ -168,6 +182,16 @@ export const work: WorkItem[] = [
       "A multi-component V8 engine modeled and assembled in SolidWorks from engineering drawings.",
     accent: "race",
     tools: ["SolidWorks"],
+    lessons: {
+      challenges: [
+        "Keeping eight pistons and connecting rods in sync with one crankshaft using the right mates.",
+        "Lining up the block, crankshaft, and bottom end so nothing interferes as the engine turns.",
+      ],
+      learned: [
+        "Building subassemblies first, piston and connecting rod, then crank and pistons, makes a big assembly manageable and easier to debug.",
+        "How to document assembly order with drawings and exploded views.",
+      ],
+    },
     figures: [
       {
         scene: "v8",
