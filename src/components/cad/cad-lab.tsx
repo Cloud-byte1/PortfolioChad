@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
-import { Box, MousePointer2, RotateCcw } from "lucide-react";
+import { Box, Eye, EyeOff, MousePointer2, RotateCcw } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { cadModels } from "@/data/cad";
@@ -24,28 +24,49 @@ const CadCanvas = dynamic(
 export function CadLab() {
   const [activeId, setActiveId] = useState(cadModels[0]?.id ?? "");
   const [autoRotate, setAutoRotate] = useState(true);
+  const [seeInside, setSeeInside] = useState(false);
   const active = cadModels.find((m) => m.id === activeId) ?? cadModels[0];
 
   return (
     <div className="flex flex-col gap-4">
       <div className="relative h-[340px] overflow-hidden rounded-xl border border-border bg-[var(--viewport)] sm:h-[420px]">
         {active ? (
-          <CadCanvas src={active.src} format={active.format} autoRotate={autoRotate} />
+          <CadCanvas
+            src={active.src}
+            format={active.format}
+            autoRotate={autoRotate}
+            ghost={seeInside ? active.ghost : undefined}
+          />
         ) : null}
-        <div className="absolute inset-x-0 top-0 flex items-start justify-between p-2">
+        <div className="absolute inset-x-0 top-0 flex flex-wrap items-start justify-between gap-1.5 p-2">
           <Badge variant="secondary" className="bg-background/90 text-[0.65rem] backdrop-blur">
             {active?.sourceNote ?? "CAD viewport"}
           </Badge>
-          <Button
-            type="button"
-            size="xs"
-            variant="outline"
-            className="rounded-full bg-background/90 backdrop-blur"
-            onClick={() => setAutoRotate((v) => !v)}
-          >
-            <RotateCcw data-icon="inline-start" />
-            {autoRotate ? "Stop spin" : "Auto-spin"}
-          </Button>
+          <div className="ml-auto flex flex-wrap justify-end gap-1.5">
+            {active?.ghost ? (
+              <Button
+                type="button"
+                size="xs"
+                variant="outline"
+                aria-pressed={seeInside}
+                className="rounded-full bg-background/90 backdrop-blur"
+                onClick={() => setSeeInside((v) => !v)}
+              >
+                {seeInside ? <EyeOff data-icon="inline-start" /> : <Eye data-icon="inline-start" />}
+                {seeInside ? "Solid" : "See inside"}
+              </Button>
+            ) : null}
+            <Button
+              type="button"
+              size="xs"
+              variant="outline"
+              className="rounded-full bg-background/90 backdrop-blur"
+              onClick={() => setAutoRotate((v) => !v)}
+            >
+              <RotateCcw data-icon="inline-start" />
+              {autoRotate ? "Stop spin" : "Auto-spin"}
+            </Button>
+          </div>
         </div>
       </div>
 
@@ -64,7 +85,10 @@ export function CadLab() {
             <button
               key={model.id}
               type="button"
-              onClick={() => setActiveId(model.id)}
+              onClick={() => {
+                setActiveId(model.id);
+                setSeeInside(false);
+              }}
               aria-pressed={selected}
               className={cn(
                 "flex w-full flex-col gap-0.5 rounded-lg border px-3 py-2.5 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring",

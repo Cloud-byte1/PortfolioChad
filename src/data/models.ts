@@ -8,20 +8,32 @@ export type CadModel = {
   src: string;
   format: CadModelFormat;
   sourceNote?: string;
+  /** Material names the "See inside" toggle fades out (e.g. an engine block). */
+  ghost?: string[];
 };
 
 /**
- * Register SolidWorks exports here after saving GLB/GLTF/STL into public/models/.
- * Native .sldprt / .sldasm cannot render in the browser.
+ * Models shown in the CAD Lab. Build GLBs from SolidWorks STL exports with
+ * scripts/build-cad-models.mjs, then scripts/optimize-cad-models.sh.
  */
 export const cadModels: CadModel[] = [
   {
-    id: "stirling-engine",
-    title: "Stirling Engine",
+    id: "v8-engine",
+    title: "V8 engine",
     description:
-      "A simplified 3D model of the Stirling engine.",
-    src: "/models/stirling-engine.stl",
-    format: "stl",
-    sourceNote: "Stirling engine (simplified)",
+      "My mini working V8 from SolidWorks: block, bottom end, crankshaft, eight pistons and connecting rods, and fan. Turn on See inside to look through the block.",
+    src: "/models/v8-engine.glb",
+    format: "glb",
+    sourceNote: "V8 engine, 20 parts",
+    ghost: ["Block", "Bottom end"],
+  },
+  {
+    id: "stirling-engine",
+    title: "Stirling engine",
+    description:
+      "Every part of my SolidWorks assembly: baseplate, displacer and power cylinders, flywheel, crank, alcohol burner, and the screws and pins that hold it together.",
+    src: "/models/stirling-engine.glb",
+    format: "glb",
+    sourceNote: "Stirling engine, 46 parts",
   },
 ];
