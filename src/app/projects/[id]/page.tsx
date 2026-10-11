@@ -117,6 +117,52 @@ export default async function ProjectPage({ params }: PageProps<"/projects/[id]"
           );
         })}
 
+        {item.improvements ? (
+          <Reveal className="border-b border-border px-4 py-7 sm:px-5">
+            <section aria-labelledby="improvements" className="flex flex-col gap-5">
+              <div className="flex flex-col gap-1.5">
+                <h2 id="improvements" className="text-lg font-bold tracking-tight text-ink">
+                  What I improved
+                </h2>
+                <p className="max-w-[62ch] text-sm leading-relaxed text-muted-foreground">
+                  Each change, the problem behind it, and what it bought on the scoresheet.
+                </p>
+              </div>
+              <ol className="grid gap-3 sm:grid-cols-2">
+                {item.improvements.map((entry, i) => (
+                  <li
+                    key={entry.area}
+                    className="flex flex-col gap-3 rounded-lg border border-[color-mix(in_oklch,var(--accent)_30%,transparent)] bg-[color-mix(in_oklch,var(--accent)_5%,transparent)] p-4"
+                  >
+                    <div className="flex items-baseline gap-2">
+                      <span className="font-mono text-xs font-semibold text-[var(--accent-ink)]">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <h3 className="text-sm font-semibold text-ink">{entry.area}</h3>
+                    </div>
+                    <dl className="flex flex-col gap-2 text-sm leading-relaxed">
+                      {(
+                        [
+                          ["Problem", entry.problem],
+                          ["Change", entry.change],
+                          ["Result", entry.result],
+                        ] as const
+                      ).map(([label, text]) => (
+                        <div key={label} className="flex flex-col gap-0.5">
+                          <dt className="text-[0.7rem] font-semibold tracking-wide text-[var(--accent-ink)] uppercase">
+                            {label}
+                          </dt>
+                          <dd className="text-muted-foreground">{text}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </li>
+                ))}
+              </ol>
+            </section>
+          </Reveal>
+        ) : null}
+
         {item.lessons ? (
           <Reveal className="border-b border-border px-4 py-7 sm:px-5">
             <section aria-labelledby="lessons" className="flex flex-col gap-5">

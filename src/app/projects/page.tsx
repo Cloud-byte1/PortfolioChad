@@ -8,7 +8,7 @@ import { site } from "@/data/portfolio";
 export const metadata: Metadata = {
   title: `Projects — ${site.name}`,
   description:
-    "Chad Carmichael’s projects: a smart golf mat, a NAS server, Stirling and V8 engines, and a college discovery app, each with an interactive figure.",
+    "Chad Carmichael’s projects: a smart golf mat, an ASCE 3D-printed bridge, a NAS server, Stirling and V8 engines, and a college discovery app, each with an interactive figure.",
 };
 
 export default function ProjectsPage() {
