@@ -12,13 +12,14 @@ export type SceneKey =
   | "nas"
   | "stirling"
   | "v8"
+  | "bridge"
   | "swipe"
   | "pipeline";
 
 export type Discipline = "Products" | "Mechanisms" | "Software";
 
 /** Each project owns one accent color (tokens in globals.css). */
-export type Accent = "turf" | "cobalt" | "flame" | "race" | "violet";
+export type Accent = "turf" | "cobalt" | "flame" | "race" | "violet" | "span";
 
 export type Figure = {
   scene: SceneKey;
@@ -27,6 +28,14 @@ export type Figure = {
   caption: string;
   /** What Chad did on this part, in plain verbs. */
   did: string[];
+};
+
+export type Improvement = {
+  area: string;
+  problem: string;
+  change: string;
+  /** Why it matters for the score or the build. */
+  result: string;
 };
 
 export type WorkItem = {
@@ -38,6 +47,8 @@ export type WorkItem = {
   accent: Accent;
   tools: string[];
   figures: Figure[];
+  /** Changes Chad made to an existing design, shown after the figures. */
+  improvements?: Improvement[];
   /** Reflection shown on the project page after the figures. */
   lessons?: { challenges: string[]; learned: string[] };
 };
@@ -115,6 +126,72 @@ export const work: WorkItem[] = [
           "Set up email and Sign in with Apple accounts on Supabase, a guest mode that stays on the phone, and account deletion.",
           "Labeled simulated swings clearly and kept them out of uploads and rankings.",
         ],
+      },
+    ],
+  },
+  {
+    id: "asce-bridge",
+    title: "ASCE printed bridge",
+    discipline: "Mechanisms",
+    summary:
+      "A plain-PLA bridge for the FAMU-FSU ASCE-FES 3D printing team in the ASCE Bridging the Future competition. The score rewards a light, stiff span that assembles quickly, and it charges you for extra plastic.",
+    accent: "span",
+    tools: ["SolidWorks", "PLA", "Slicing", "Fit testing"],
+    lessons: {
+      challenges: [
+        "A socket that measures right in CAD prints tight, because PLA shrinks as it cools.",
+        "Putting more people on assembly can cost points. The clock is multiplied by the number of constructors, and a repair pass is charged at 1.5×.",
+        "Strength past the 70 lb test cap only adds weight, while the deck still has to carry 25 lb without a local punch-through.",
+      ],
+      learned: [
+        "Orientation, walls, and infill are part of the structure. Layer lines are the weak plane.",
+        "A coupon of the joint is cheaper than a full bridge when the fit is wrong.",
+        "Each scoring term says what to cut: load over weight, 25 lb over deflection over weight, and constructor-minutes.",
+      ],
+    },
+    figures: [
+      {
+        scene: "bridge",
+        title: "Print, then load",
+        caption:
+          "The head lays PLA along the chords. Click to set the midspan load and watch the truss take it.",
+        did: [
+          "Held the model to the competition envelope: a 20 in clear span, no more than 24 in long, 6 in wide, and 8 in tall, with a 3.5 in vehicle passage and a continuous printed deck.",
+          "Split the span into pieces that fit the printer bed and the 8.7 × 8.7 × 6.5 in parts box, and joined them with mechanical connections only.",
+          "Embossed the school name into a printed face so the design score is not marked down for a missing label.",
+        ],
+      },
+    ],
+    improvements: [
+      {
+        area: "Weight",
+        problem: "Members that carried little load were printed as heavy as the ones that carried a lot.",
+        change: "Removed material from the low-load members and kept it where the truss actually works.",
+        result: "Capacity is divided by weight, and strength past the 70 lb cap earns nothing, so every gram cut raises the score.",
+      },
+      {
+        area: "Print strength",
+        problem: "Layer lines are the weak plane in a PLA part, and parts printed in the wrong direction split along them.",
+        change: "Set orientation, wall count, and infill so the layer lines follow the load path, and kept supports off the mating faces.",
+        result: "Stronger members at the same weight, with clean joint faces that seat without sanding.",
+      },
+      {
+        area: "Joint fit",
+        problem: "Sockets that measured right in CAD printed tight because PLA shrinks as it cools.",
+        change: "Opened the socket clearance for shrinkage and printed small connection coupons to check the fit first.",
+        result: "Fit problems show up on a coupon that prints in minutes instead of on a full bridge.",
+      },
+      {
+        area: "Stiffness",
+        problem: "Under the 25 lb stiffness check, the center load plate could punch through the deck instead of loading the truss.",
+        change: "Tied the load plate into the truss so the load spreads into the chords.",
+        result: "The span deflects as one structure, which keeps measured deflection down and the deck intact.",
+      },
+      {
+        area: "Assembly time",
+        problem: "Assembly time is multiplied by the number of constructors, and a repair pass is charged at 1.5×.",
+        change: "Cut the joint count and simplified the seating motion so each piece goes in one way.",
+        result: "Fewer people can build it faster, with less chance of a costly repair.",
       },
     ],
   },
