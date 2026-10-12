@@ -11,7 +11,6 @@ import {
   GolfBallIcon,
   Settings02Icon,
   SmartPhone01Icon,
-  ThreeDPrinterIcon,
 } from "@hugeicons/core-free-icons";
 import { work } from "@/data/work";
 import { SceneView } from "@/components/work/scene-view";
@@ -20,7 +19,6 @@ import { cn } from "@/lib/utils";
 
 const icons = {
   fairlie: GolfBallIcon,
-  "asce-bridge": ThreeDPrinterIcon,
   nas: DatabaseIcon,
   "stirling-engine": Settings02Icon,
   "v8-engine": EngineIcon,
