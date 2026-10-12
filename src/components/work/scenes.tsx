@@ -1254,113 +1254,6 @@ function PipelineScene({ t, a, n }: SceneState) {
 }
 
 /* ------------------------------------------------------------------ */
-/* ASCE bridge: a PLA truss prints, then takes a midspan load           */
-/* ------------------------------------------------------------------ */
-
-const BR = makeIso(164, 196, 1.02);
-const BAYS = [-72, -36, 0, 36, 72];
-
-type Joint = { x: number; y: number; z: number };
-
-function bridgeLine(a: Joint, b: Joint, hot: boolean, key: string) {
-  const [x1, y1] = BR.p(a.x, a.y, a.z);
-  const [x2, y2] = BR.p(b.x, b.y, b.z);
-  return (
-    <line
-      key={key}
-      className={hot ? "trace sig" : "trace"}
-      style={{ strokeWidth: hot ? "16px" : "13px", strokeLinecap: "round" }}
-      x1={r1(x1)}
-      y1={r1(y1)}
-      x2={r1(x2)}
-      y2={r1(y2)}
-    />
-  );
-}
-
-function BridgeScene({ t, a }: SceneState) {
-  const acting = a >= 0;
-  const press = acting ? Math.sin(Math.PI * seg(a, 0.18, 0.88)) : 0;
-  const sag = (x: number) => 8 * press * (1 - (x / 72) ** 2);
-  const sweep = (Math.sin(t * Math.PI * 2) + 1) / 2;
-  const headX = acting ? 72 : lerp(-72, 72, sweep);
-
-  const chord = (y: number, z: number, share: number) =>
-    BAYS.map((x) => ({ x, y, z: z - sag(x) * share }));
-
-  const farBot = chord(-16, 18, 1);
-  const farTop = chord(-16, 50, 0.35);
-  const nearBot = chord(12, 18, 1);
-  const nearTop = chord(12, 50, 0.35);
-  const hot = press > 0.2;
-
-  const truss = (bot: Joint[], top: Joint[], id: string) => {
-    const lines = [];
-    for (let i = 0; i < BAYS.length - 1; i++) {
-      lines.push(bridgeLine(bot[i], bot[i + 1], hot, `${id}-b${i}`));
-      lines.push(bridgeLine(top[i], top[i + 1], hot && Math.abs(BAYS[i]) < 50, `${id}-t${i}`));
-      const rising = i % 2 === 0;
-      lines.push(
-        bridgeLine(
-          rising ? bot[i] : top[i],
-          rising ? top[i + 1] : bot[i + 1],
-          hot,
-          `${id}-d${i}`
-        )
-      );
-    }
-    BAYS.forEach((x, i) => {
-      if (i === 0 || i === BAYS.length - 1) return;
-      lines.push(bridgeLine(bot[i], top[i], hot && Math.abs(x) <= 36, `${id}-v${i}`));
-    });
-    return lines;
-  };
-
-  const deck = BAYS.slice(0, -1).map((_, i) => {
-    const a = farBot[i];
-    const b = farBot[i + 1];
-    const c = nearBot[i + 1];
-    const d = nearBot[i];
-    const lift = (p: Joint): [number, number, number] => [p.x, p.y, p.z + 3];
-    return (
-      <polygon
-        key={`deck-${i}`}
-        className="edge face-t"
-        points={BR.pts([lift(a), lift(b), lift(c), lift(d)])}
-      />
-    );
-  });
-
-  const nozzle = { x: headX, y: -2, z: 64 - sag(headX) * 0.2 };
-  const [nx, ny] = BR.p(nozzle.x, nozzle.y, nozzle.z);
-  const plateZ = lerp(86, 24 - sag(0), acting ? smooth(seg(a, 0.04, 0.3)) : 0);
-  const [px, py] = BR.p(0, -2, plateZ);
-
-  return (
-    <>
-      <IsoBox iso={BR} x={-108} y={-26} z={0} w={34} d={48} h={18} />
-      <IsoBox iso={BR} x={74} y={-26} z={0} w={34} d={48} h={18} />
-      {truss(farBot, farTop, "far")}
-      {deck}
-      {truss(nearBot, nearTop, "near")}
-      {BAYS.map((x, i) =>
-        i === 0 || i === BAYS.length - 1 ? null : (
-          <g key={`cross-${i}`}>{bridgeLine(farTop[i], nearTop[i], hot && Math.abs(x) <= 36, `c${i}`)}</g>
-        )
-      )}
-      <g opacity={acting ? 0.35 : 0.95}>
-        <IsoBox iso={BR} x={headX - 7} y={-8} z={62} w={14} d={12} h={8} top="face-sig" />
-        <line className="ln sig" x1={r1(nx)} y1={r1(ny)} x2={r1(BR.p(headX, -2, 52)[0])} y2={r1(BR.p(headX, -2, 52)[1])} />
-      </g>
-      <g opacity={acting ? 1 : 0}>
-        <line className="ln faint" x1={r1(px)} y1={r1(py - 28)} x2={r1(px)} y2={r1(py)} />
-        <IsoBox iso={BR} x={-8} y={-10} z={plateZ} w={16} d={16} h={4} top="face-sig-soft" />
-      </g>
-    </>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 
 export const scenes: Record<SceneKey, SceneSpec> = {
   strike: {
@@ -1459,21 +1352,6 @@ export const scenes: Record<SceneKey, SceneSpec> = {
           : a < 0.7
             ? "Running fast, displacer 90° ahead of the power piston"
             : "Cooling back down",
-  },
-  bridge: {
-    render: (s) => <BridgeScene {...s} />,
-    duration: 3600,
-    rest: 0.2,
-    action: 4600,
-    verb: "Load the span",
-    status: ({ a }) =>
-      a < 0
-        ? "Laying PLA on the chords. Click to load the span."
-        : a < 0.28
-          ? "Setting the load plate at midspan"
-          : a < 0.7
-            ? "25 lb on. The truss takes the deflection, not just the deck."
-            : "Unloading. Extra PLA past 70 lb would only add weight.",
   },
   v8: {
     render: (s) => <V8Scene {...s} />,
